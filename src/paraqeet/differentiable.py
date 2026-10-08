@@ -33,7 +33,6 @@ class Differentiable(ABC):
         """
         pass
 
-    @abstractmethod
     def get_gradient(self, times: Array) -> Array:
         """Calculate the gradient of the object.
 
@@ -49,7 +48,8 @@ class Differentiable(ABC):
             2) The array has dimension (n_params, (dimensions_of_object)). This is the case for instance of fidelities
             that are a function of an array of times.
         """
-        pass
+        _, gradient = self.get_value_and_gradient(times)
+        return gradient
 
     def get_value_and_gradient(self, times: Array) -> tuple[Array | Float, Array]:
         """Calculate the value and the gradient of the object.
