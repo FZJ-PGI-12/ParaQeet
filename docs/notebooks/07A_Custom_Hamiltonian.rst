@@ -136,7 +136,7 @@ function
     
     zeroone = Fidelity(
         propagation_func=prop.get_value,
-        propagation_gradient_func=prop.get_gradient,
+        propagation_and_gradient_func=prop.get_value_and_gradient,
         target_states=target,
         overlap=overlap_state_vector,
         fid=state_fidelity,
@@ -222,7 +222,7 @@ function) with the updated ``hamiltonian_and_gradient_func``.
     
     zeroone = Fidelity(
         propagation_func=prop.get_value,
-        propagation_gradient_func=prop.get_gradient,
+        propagation_and_gradient_func=prop.get_value_and_gradient,
         target_states=target,
         overlap=overlap_state_vector,
         fid=state_fidelity,
@@ -237,7 +237,7 @@ function) with the updated ``hamiltonian_and_gradient_func``.
 
 .. parsed-literal::
 
-    0.6404027521371738
+    Array(0.64, dtype=float64)
 
 
 
@@ -275,7 +275,7 @@ function) with the updated ``hamiltonian_and_gradient_func``.
 
 .. parsed-literal::
 
-    {'status': 1, 'value': 2.4424906541753444e-15, 'iterations': 10, 'message': 'CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL'}
+    {'status': 1, 'value': 2.4424906541753444e-15, 'iterations': 7, 'evaluations': 10, 'message': 'CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL'}
 
 
 
@@ -305,6 +305,6 @@ function) with the updated ``hamiltonian_and_gradient_func``.
 
 .. parsed-literal::
 
-    0.9999999999999976
+    Array(1., dtype=float64)
 
 

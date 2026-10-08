@@ -28,15 +28,16 @@ Gradient-based optimization of a cross-resonance gate between two transmons
 System Setup
 ------------
 
-The system consists of two coupled transmons (Koch et al., 2007) with
-three levels each. We fix the transmon frequency and anharmonicity to
-values that don’t have any unwanted frequency collisions. The coupling
-strength is fixed as well. These parameters have to be specified as
-Quantities with a range, but we will not pass them to the optimizer in
-order to keep them fixed. Additionally, the first transmon is driven at
-the frequency of the second one to apply a cross-resonance (CR) gate
-(Sheldon et al., 2016). The second transmon is driven to fix the phases
-of the gate.
+The system consists of two coupled transmons (Koch et al., 2007)
+:cite:p:`koch2007charge` with three levels each. We fix the transmon
+frequency and anharmonicity to values that don’t have any unwanted
+frequency collisions. The coupling strength is fixed as well. These
+parameters have to be specified as Quantities with a range, but we will
+not pass them to the optimizer in order to keep them fixed.
+Additionally, the first transmon is driven at the frequency of the
+second one to apply a cross-resonance (CR) gate (Sheldon et al., 2016)
+:cite:p:`sheldon2016procedure`. The second transmon is driven to fix the
+phases of the gate.
 
 Here the tone values are set such that the optimization process is fast.
 Generally, with a lot of parameters, ``GOAT`` (in its current form) can
@@ -315,7 +316,7 @@ configure CR as a target gate.
     
     gate_fid = UnitaryFidelity(
         propagation_func=prop.get_value,
-        propagation_gradient_func=prop.get_gradient,
+        propagation_and_gradient_func=prop.get_value_and_gradient,
         gate=cr_gate,
     )
     gate_fid.get_value(times)
@@ -325,7 +326,7 @@ configure CR as a target gate.
 
 .. parsed-literal::
 
-    0.03713341214936888
+    0.03713341214936892
 
 
 
@@ -482,7 +483,7 @@ The only optimizable parameter is the frequency of transmon 1.
 
 .. parsed-literal::
 
-    {'status': 1, 'value': 0.93624378929706, 'iterations': 2, 'message': 'CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH'}
+    {'status': 1, 'value': 0.936198605958273, 'iterations': 1, 'evaluations': 2, 'message': 'CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH'}
 
 
 
@@ -507,9 +508,9 @@ The only optimizable parameter is the frequency of transmon 1.
 References
 ----------
 
--  **(Koch et al., 2007)** J. Koch et al., “Charge-insensitive qubit
-   design derived from the Cooper pair box,” *Physical Review A* **76**,
-   042319 (2007).
--  **(Sheldon et al., 2016)** S. Sheldon et al., “Procedure for
-   systematically tuning up cross-talk in the cross-resonance gate,”
-   *Physical Review A* **93**, 060302 (2016).
+- **(Koch et al., 2007)** J. Koch et al., “Charge-insensitive qubit
+  design derived from the Cooper pair box,” *Physical Review A* **76**,
+  042319 (2007).
+- **(Sheldon et al., 2016)** S. Sheldon et al., “Procedure for
+  systematically tuning up cross-talk in the cross-resonance gate,”
+  *Physical Review A* **93**, 060302 (2016).

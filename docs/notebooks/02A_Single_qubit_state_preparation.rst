@@ -142,7 +142,7 @@ and configure a state transfer problem from :math:`\ket{0}` to
     
     zeroone = Fidelity(
         propagation_func=prop_AD.get_value,
-        propagation_gradient_func=prop_AD.get_gradient,
+        propagation_and_gradient_func=prop_AD.get_value_and_gradient,
         target_states=target,
         overlap=overlap_state_vector,
         fid=gate_fidelity,
@@ -268,7 +268,7 @@ We can now run the optimization as
 
 .. parsed-literal::
 
-    {'status': 1, 'value': 5.020428517354958e-13, 'iterations': 11, 'message': 'CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH'}
+    {'status': 1, 'value': 5.020428517354958e-13, 'iterations': 7, 'evaluations': 11, 'message': 'CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH'}
 
 
 The new optimal parameters are

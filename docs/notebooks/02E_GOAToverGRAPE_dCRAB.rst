@@ -3,11 +3,13 @@ Gradient based dCRAB optimization of a single spin
 
 In this example, we solve the optimization task in the `previous
 example <02D_GOAToverGRAPE_TLS.ipynb>`__ by using the dCRAB (Rach et
-al., 2015) (Müller et al., 2022) optimization method. Here we implement
-a gradient based dCRAB algorithm by using the GOAToverGRAPE method,
-which combines GOAT (Machnes et al., 2018) and GRAPE (Khaneja et al.,
-2005) as a gradient-based variant of the GROUP method (Sørensen et al.,
-2018).
+al., 2015) :cite:p:`rach2015dressing` (Müller et al., 2022)
+:cite:p:`muller2022one` optimization method. Here we implement a
+gradient based dCRAB algorithm by using the GOAToverGRAPE method, which
+combines GOAT (Machnes et al., 2018) :cite:p:`machnes2018tunable` and
+GRAPE (Khaneja et al., 2005) :cite:p:`khaneja2005optimal` as a
+gradient-based variant of the GROUP method (Sørensen et al., 2018)
+:cite:p:`sorensen2018quantum`.
 
 1. Generate a PWC pulse shape
 -----------------------------
@@ -113,7 +115,7 @@ of the time grid used for discretization. In this case
     
     zeroone = FidelityGRAPE(
         propagation_func=prop.get_value,
-        propagation_gradient_func=prop.get_gradient,
+        propagation_and_gradient_func=prop.get_value_and_gradient,
         target_states=target,
         overlap=overlap_state_vector,
         fid=gate_fidelity,
@@ -231,15 +233,35 @@ coefficients for the optimization.
 .. parsed-literal::
 
     Iteration number = 0 	  Infidelity  = 9.999e-01
+
+
+.. parsed-literal::
+
     Iteration number = 10 	  Infidelity  = 2.753e-03
+
+
+.. parsed-literal::
+
     
     
     ==== Decrease in infidelity less than 1e-09 ====
     ==== Starting super-iteration 1 ====
     * Current lowest infidelity =  2.071e-11
     * Current no. of parameters = 25
+
+
+.. parsed-literal::
+
     Iteration number = 20 	  Infidelity  = 4.878e-02
+
+
+.. parsed-literal::
+
     Iteration number = 30 	  Infidelity  = 2.294e-05
+
+
+.. parsed-literal::
+
     Setting parameters to the best values.
 
 
@@ -252,7 +274,7 @@ coefficients for the optimization.
 
 .. parsed-literal::
 
-    {'status': 1, 'value': 2.071320892582662e-11, 'iterations': 33, 'message': 'CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH'}
+    {'status': 1, 'value': 2.071320892582662e-11, 'iterations': 39, 'evaluations': 64, 'message': 'CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH'}
 
 
 
@@ -305,20 +327,19 @@ fidelity.
 References
 ----------
 
--  **(Khaneja et al., 2005)** N. Khaneja et al., “Optimal control of
-   coupled spin dynamics: design of NMR pulse sequences by gradient
-   ascent algorithms,” *Journal of Magnetic Resonance* **172**, 296–305
-   (2005).
--  **(Machnes et al., 2018)** S. Machnes et al., “Tunable, flexible, and
-   efficient optimization of control pulses for practical qubits,”
-   *Physical Review Letters* **120**, 150401 (2018).
--  **(Sørensen et al., 2018)** J. J. W. H. Sørensen et al., “Quantum
-   optimal control in a chopped basis: Applications in control of
-   Bose-Einstein condensates,” *Physical Review A* **98**, 022119
-   (2018).
--  **(Rach et al., 2015)** N. Rach et al., “Dressing the
-   chopped-random-basis optimization: A bandwidth-limited access to the
-   trap-free landscape,” *Physical Review A* **92**, 062343 (2015).
--  **(Müller et al., 2022)** M. M. Müller et al., “One decade of quantum
-   optimal control in the chopped random basis,” *Reports on Progress in
-   Physics* **85**, 076001 (2022).
+- **(Khaneja et al., 2005)** N. Khaneja et al., “Optimal control of
+  coupled spin dynamics: design of NMR pulse sequences by gradient
+  ascent algorithms,” *Journal of Magnetic Resonance* **172**, 296–305
+  (2005).
+- **(Machnes et al., 2018)** S. Machnes et al., “Tunable, flexible, and
+  efficient optimization of control pulses for practical qubits,”
+  *Physical Review Letters* **120**, 150401 (2018).
+- **(Sørensen et al., 2018)** J. J. W. H. Sørensen et al., “Quantum
+  optimal control in a chopped basis: Applications in control of
+  Bose-Einstein condensates,” *Physical Review A* **98**, 022119 (2018).
+- **(Rach et al., 2015)** N. Rach et al., “Dressing the
+  chopped-random-basis optimization: A bandwidth-limited access to the
+  trap-free landscape,” *Physical Review A* **92**, 062343 (2015).
+- **(Müller et al., 2022)** M. M. Müller et al., “One decade of quantum
+  optimal control in the chopped random basis,” *Reports on Progress in
+  Physics* **85**, 076001 (2022).

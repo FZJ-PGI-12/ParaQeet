@@ -53,7 +53,8 @@ Gaussian pulse
 
 Next, we set up the qubit system we want to control. We define the
 Hamiltonian in the rotating frame of drive such that the pulse
-oscillates slowly to apply GRAPE (Khaneja et al., 2005) gradients.
+oscillates slowly to apply GRAPE (Khaneja et al., 2005)
+:cite:p:`khaneja2005optimal` gradients.
 
 The Hamiltonian in the rotating frame of the drive is given by -
 
@@ -113,7 +114,7 @@ The Hamiltonian in the rotating frame of the drive is given by -
     
     zeroone = FidelityGRAPE(
         propagation_func=prop.get_value,
-        propagation_gradient_func=prop.get_gradient,
+        propagation_and_gradient_func=prop.get_value_and_gradient,
         target_states=target,
         overlap=overlap_state_vector,
         fid=gate_fidelity,
@@ -150,7 +151,7 @@ As expected, we get a partial transfer and a low fidelity.
 
 .. parsed-literal::
 
-    0.31007536132952823
+    Array(0.31, dtype=float64)
 
 
 
@@ -184,7 +185,7 @@ frequency, as in the state transfer example.
 
 .. parsed-literal::
 
-    {'status': 1, 'value': 1.538807525847119e-09, 'iterations': 14, 'message': 'CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL'}
+    {'status': 1, 'value': 1.5388084140255387e-09, 'iterations': 11, 'evaluations': 14, 'message': 'CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL'}
 
 
 
@@ -208,7 +209,7 @@ frequency, as in the state transfer example.
 References
 ----------
 
--  **(Khaneja et al., 2005)** N. Khaneja et al., “Optimal control of
-   coupled spin dynamics: design of NMR pulse sequences by gradient
-   ascent algorithms,” *Journal of Magnetic Resonance* **172**, 296–305
-   (2005).
+- **(Khaneja et al., 2005)** N. Khaneja et al., “Optimal control of
+  coupled spin dynamics: design of NMR pulse sequences by gradient
+  ascent algorithms,” *Journal of Magnetic Resonance* **172**, 296–305
+  (2005).

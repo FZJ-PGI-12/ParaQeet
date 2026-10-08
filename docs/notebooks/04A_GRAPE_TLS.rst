@@ -2,7 +2,8 @@ GRAPE on a single spin
 ======================
 
 This is an introductory example to the GRAPE (Khaneja et al., 2005)
-method and its implementation in this software package.
+:cite:p:`khaneja2005optimal` method and its implementation in this
+software package.
 
 1. Generate a PWC pulse shape
 -----------------------------
@@ -94,7 +95,7 @@ As a simple toy model, we use a single spin.
     
     zeroone = FidelityGRAPE(
         propagation_func=prop.get_value,
-        propagation_gradient_func=prop.get_gradient,
+        propagation_and_gradient_func=prop.get_value_and_gradient,
         target_states=target,
         overlap=overlap_state_vector,
         fid=gate_fidelity,
@@ -129,7 +130,7 @@ As a simple toy model, we use a single spin.
 
 .. parsed-literal::
 
-    0.10336679494545331
+    Array(0.103, dtype=float64)
 
 
 
@@ -159,7 +160,7 @@ from a ``PWCGenerator`` using ``gen.tlist``.
 
 .. parsed-literal::
 
-    {'status': 1, 'value': 3.647415702801027e-11, 'iterations': 20, 'message': 'CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH'}
+    {'status': 1, 'value': 3.647437907261519e-11, 'iterations': 7, 'evaluations': 20, 'message': 'CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH'}
 
 
 
@@ -263,7 +264,7 @@ Let’s test GRAPE with ODE propagation
     
     zeroone = FidelityGRAPE(
         propagation_func=prop.get_value,
-        propagation_gradient_func=prop.get_gradient,
+        propagation_and_gradient_func=prop.get_value_and_gradient,
         target_states=target,
         overlap=overlap_density_matrix,
         fid=gate_fidelity,
@@ -310,7 +311,7 @@ Let’s test GRAPE with ODE propagation
 
 .. parsed-literal::
 
-    0.010995595533833951
+    Array(0.011, dtype=float64)
 
 
 
@@ -336,7 +337,7 @@ Let’s test GRAPE with ODE propagation
 
 .. parsed-literal::
 
-    {'status': 1, 'value': 0.005074226720400921, 'iterations': 36, 'message': 'CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH'}
+    {'status': 1, 'value': 0.005074226720406472, 'iterations': 9, 'evaluations': 38, 'message': 'CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH'}
 
 
 
@@ -366,14 +367,14 @@ Let’s test GRAPE with ODE propagation
 
 .. parsed-literal::
 
-    0.9949257732795989
+    Array(0.995, dtype=float64)
 
 
 
 References
 ----------
 
--  **(Khaneja et al., 2005)** N. Khaneja et al., “Optimal control of
-   coupled spin dynamics: design of NMR pulse sequences by gradient
-   ascent algorithms,” *Journal of Magnetic Resonance* **172**, 296–305
-   (2005).
+- **(Khaneja et al., 2005)** N. Khaneja et al., “Optimal control of
+  coupled spin dynamics: design of NMR pulse sequences by gradient
+  ascent algorithms,” *Journal of Magnetic Resonance* **172**, 296–305
+  (2005).

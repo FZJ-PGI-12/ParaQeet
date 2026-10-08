@@ -24,7 +24,8 @@ First, we make the necessary imports.
 
 The GaussTone explicitly allows for the evaluation of an envelope signal
 and its time derivative which is then used to calculate the DRAG (Motzoi
-et al., 2009) corrected signal in the DRAGMixer
+et al., 2009) :cite:p:`motzoi2009simple` corrected signal in the
+DRAGMixer
 
 .. code:: ipython3
 
@@ -154,7 +155,7 @@ reference defined above is used.
 
     gate_fid = UnitaryFidelity(
         propagation_func=prop.get_value,
-        propagation_gradient_func=prop.get_gradient,
+        propagation_and_gradient_func=prop.get_value_and_gradient,
         gate=rx(np.pi / 2),
     )
 
@@ -221,7 +222,7 @@ and the parameters of the cosine tone.
 
 .. parsed-literal::
 
-    {'status': 1, 'value': 0.005760894081225376, 'iterations': 90, 'message': 'CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH'}
+    {'status': 1, 'value': 0.005760894081225376, 'iterations': 9, 'evaluations': 90, 'message': 'CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH'}
 
 
 
@@ -288,6 +289,6 @@ smaller than initially.
 References
 ----------
 
--  **(Motzoi et al., 2009)** F. Motzoi et al., “Simple pulses for
-   elimination of leakage in weakly nonlinear qubits,” *Physical Review
-   Letters* **103**, 110501 (2009).
+- **(Motzoi et al., 2009)** F. Motzoi et al., “Simple pulses for
+  elimination of leakage in weakly nonlinear qubits,” *Physical Review
+  Letters* **103**, 110501 (2009).

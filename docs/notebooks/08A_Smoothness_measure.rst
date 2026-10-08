@@ -1,7 +1,8 @@
 Constrain piece-wise constant pulses to vary smoothly
 =====================================================
 
-The smoothness penalty follows the definition of (Heeres et al., 2017).
+The smoothness penalty follows the definition of (Heeres et al., 2017)
+:cite:p:`heeres2017implementing`.
 
 .. code:: ipython3
 
@@ -91,7 +92,7 @@ We can check that the gradient has the correct shape
 
 .. parsed-literal::
 
-    {'status': 1, 'value': 1.1649151643311484e-09, 'iterations': 20, 'message': 'CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL'}
+    {'status': 1, 'value': 1.1649151643311484e-09, 'iterations': 13, 'evaluations': 20, 'message': 'CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL'}
 
 
 
@@ -144,6 +145,6 @@ As expected, we obtain a flat pulse.
 References
 ----------
 
--  **(Heeres et al., 2017)** R. W. Heeres et al., “Implementing a
-   universal gate set on a logical qubit encoded in an oscillator,”
-   *Nature Communications* **8**, 94 (2017).
+- **(Heeres et al., 2017)** R. W. Heeres et al., “Implementing a
+  universal gate set on a logical qubit encoded in an oscillator,”
+  *Nature Communications* **8**, 94 (2017).
