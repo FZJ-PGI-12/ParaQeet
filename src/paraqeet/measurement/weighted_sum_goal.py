@@ -123,7 +123,7 @@ class WeightedSumGoal(CostFunction, Differentiable):
         return jnp.array(self.get_value(times))
 
     @override
-    def get_gradient(self, times: Array) -> Array:
+    def get_value_and_gradient(self, times: Array) -> tuple[Array, Array]:
         """Sum of weighted measurements from gradient-ized measurements.
 
         Args:
@@ -152,4 +152,4 @@ class WeightedSumGoal(CostFunction, Differentiable):
                 grads_diff += 2 * (meas_a[0] - meas_b[0]) * (meas_a[1] - meas_b[1])
             sum_meas += self._sum_of_squares_options["weight"] * sum_square_diff
             sum_grads += self._sum_of_squares_options["weight"] * grads_diff
-        return sum_grads
+        return sum_meas, sum_grads
