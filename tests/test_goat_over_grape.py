@@ -130,7 +130,7 @@ def fid(prop):
 
     zeroone = FidelityGRAPE(
         propagation_func=prop.get_value,
-        propagation_gradient_func=prop.get_gradient,
+        propagation_and_gradient_func=prop.get_value_and_gradient,
         overlap=overlap_state_vector,
         fid=state_fidelity,
         target_states=target,

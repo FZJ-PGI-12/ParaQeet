@@ -49,7 +49,7 @@ PROP = GOAT(
 
 ZEROONE = Fidelity(
     propagation_func=PROP.get_value,
-    propagation_gradient_func=PROP.get_gradient,
+    propagation_and_gradient_func=PROP.get_value_and_gradient,
     target_states=TARGET,
     fid=state_fidelity,
     overlap=overlap_state_vector,

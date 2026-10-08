@@ -24,7 +24,7 @@ def opt(rabi):
     optmap.add(rabi, rabi.get_parameters())
     fid = Fidelity(
         propagation_func=rabi.get_value,
-        propagation_gradient_func=None,
+        propagation_and_gradient_func=None,
         target_states=jax.numpy.array([[0.0], [1]]),
         fid=state_fidelity,
         overlap=overlap_state_vector,

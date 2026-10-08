@@ -28,7 +28,7 @@ def test_limits_vectors():
         times = np.array([1.0])
         measurement = Fidelity(
             propagation.get_value,
-            propagation_gradient_func=None,
+            propagation_and_gradient_func=None,
             target_states=target_state,
             overlap=overlap_density_matrix_root,
             fid=densitiy_matrix_trace_fidelity,
@@ -48,7 +48,7 @@ def test_vector_equality():
             propagation.set_initial_state(state)
             measurement = Fidelity(
                 propagation.get_value,
-                propagation_gradient_func=None,
+                propagation_and_gradient_func=None,
                 target_states=state,
                 overlap=overlap_density_matrix_root,
                 fid=densitiy_matrix_trace_fidelity,
@@ -80,7 +80,7 @@ def test_incompatible_shape():
 
             measurement = Fidelity(
                 propagation.get_value,
-                propagation_gradient_func=None,
+                propagation_and_gradient_func=None,
                 target_states=target_state,
                 overlap=overlap_density_matrix_root,
                 fid=densitiy_matrix_trace_fidelity,
