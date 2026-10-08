@@ -132,10 +132,6 @@ class Signal(Optimizable, Differentiable):
             grads = jnp.squeeze(grads, -1)
         return grads
 
-    @override
-    def get_value_and_gradient(self, times: Array) -> tuple:
-        return self.get_value(times), self.get_gradient(times)
-
     def get_time_gradient(self, times: Array) -> Array:
         """Compute a signal envelope's time derivative.
 
