@@ -163,12 +163,12 @@ class UnitaryFidelity(Fidelity):
 
     _target_states: Array
     _propagation_func: Callable[[Array], Array]
-    _propagation_and_gradient_func: Callable[[Array], Array]
+    _propagation_and_gradient_func: Callable[[Array], tuple[Array, Array]]
 
     def __init__(
         self,
         propagation_func: Callable[[Array], Array],
-        propagation_and_gradient_func: Callable[[Array], Array],
+        propagation_and_gradient_func: Callable[[Array], tuple[Array, Array]],
         gate: Array,
         basis_states: Array | None = None,
     ) -> None:
