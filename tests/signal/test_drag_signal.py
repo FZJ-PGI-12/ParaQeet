@@ -1,7 +1,9 @@
 """Test the functionality of the generation of the DRAG corrected signal."""
 
+import jax.numpy as jnp
 import numpy as np
 import pytest
+from jax import jacfwd, vmap
 
 from paraqeet.signal.envelopes import (
     FlatTopGaussianEnvelope,
@@ -111,3 +113,41 @@ def test_gradient_flattop(flattop, time_samples):
     flattop.set_optimizable_parameters(flattop.get_parameters())
     _, grads = flattop.get_value_and_gradient(time_samples)
     assert grads.shape[0] == time_samples.shape[0]
+
+
+@pytest.mark.parametrize("env_cls", [GaussEnvelope, FlatTopGaussianEnvelope])
+@pytest.mark.parametrize("n_times", [1, 3, 7])
+def test_drag_get_time_and_parameter_gradient_values(env_cls, n_times):
+    """Check if `get_time_and_parameter_gradient` returns correct (T,P) values."""
+    env = env_cls()
+    params = env.get_parameters()
+    env.set_optimizable_parameters(params)
+    times = np.linspace(0, 10e-9, n_times)
+
+    grads = env.get_time_and_parameter_gradient(times)
+    assert grads.shape == (n_times, len(params)), f"Expected shape ({n_times}, {len(params)}), got {grads.shape}"
+
+    param_values = [p.get_value() for p in params]
+    t_arr = np.array(times, ndmin=1)
+
+    def compute_gradient_vmap(t):
+        f = lambda time: jnp.reshape(jnp.stack(env._partial_grads_function(*param_values, time)), (-1,))
+        return jacfwd(f)(t)
+
+    ref = vmap(compute_gradient_vmap)(t_arr)
+    np.testing.assert_allclose(grads, ref, rtol=1e-10, atol=1e-14)
+
+
+@pytest.mark.parametrize("env_cls", [GaussEnvelope, FlatTopGaussianEnvelope])
+@pytest.mark.parametrize("n_times", [1, 100])
+def test_drag_mixer_gradient_endtoend(env_cls, n_times):
+    """Check if DRAGMixer.get_gradient works at T=1."""
+    tone = env_cls()
+    tone.set_optimizable_parameters(tone.get_parameters())
+    drag_tone = DRAGMixer(tone)
+    drag_tone.set_optimizable_parameters(tone.get_parameters())
+    times = np.linspace(0, 10e-9, n_times)
+
+    grad = drag_tone.get_gradient(times)
+    assert grad.shape[0] == n_times, f"Expected {n_times} rows, got {grad.shape[0]}"
+    assert np.all(np.isfinite(grad)), "Gradient contains NaN or Inf"

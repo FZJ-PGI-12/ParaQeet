@@ -171,14 +171,15 @@ class Signal(Optimizable, Differentiable):
         params = self.get_parameters()
         param_values = [param.get_value() for param in params]
         t_arr = jnp.array(times, ndmin=1)
-        grads = jnp.empty((t_arr.shape[0], 0))
-        if self._partial_grads_function is not None:
-            env_time_and_param_grad_fun = jacfwd(self._partial_grads_function, argnums=-1)
-            env_time_and_param_grad = env_time_and_param_grad_fun(*param_values, t_arr)
-            grads = jnp.stack(env_time_and_param_grad, axis=1)
-            grads = jnp.diagonal(grads, axis1=0, axis2=-1)
-            grads = jnp.transpose(grads, axes=(2, 0, 1))
-        return jnp.squeeze(grads, axis=-1)
+        if self._partial_grads_function is None:
+            return jnp.empty((t_arr.shape[0], 0))
+
+        def compute_gradient_vmap(t):
+            f = lambda time: jnp.reshape(jnp.stack(self._partial_grads_function(*param_values, time)), (-1,))
+            return jacfwd(f)(t)
+
+        # ignoring mypy due to vmap
+        return vmap(compute_gradient_vmap)(t_arr)  # type: ignore
 
 
 class LocalOscillator(Signal):
