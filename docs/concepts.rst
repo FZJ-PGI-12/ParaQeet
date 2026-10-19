@@ -8,9 +8,9 @@ layer above it in the hierarchy, which keeps the codebase modular: you can swap
 a pulse parametrization, a propagator, or an optimizer without touching the
 rest of the setup. The codebase follows the modular structure shown below:
 
-.. image:: ./layers.png
+.. image:: ./layers.svg
    :align: center
-   :width: 80%
+   :width: 100%
    :alt: The ParaQeet layer stack
 
 The modules

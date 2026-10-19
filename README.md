@@ -29,7 +29,7 @@ We use a top-down approach to make the codebase modular.
 Each module interacts only with the module above it in hierarchy. 
 
 <div align="center">
-  <center><img src="https://jugit.fz-juelich.de/pgi-12-external/qfc/paraqeet/-/raw/main/docs/layers.png" alt="Layers" width="40%"/></center>
+  <center><img src="https://jugit.fz-juelich.de/pgi-12-external/qfc/paraqeet/-/raw/main/docs/layers.svg" alt="Layers" width="90%"/></center>
 </div>
 
 Currently implemented QOC methods:
