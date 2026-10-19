@@ -25,8 +25,10 @@ Choose a pulse parametrisation, simulate a quantum system, and optimize.
 Combining Quantum Optimal Control (QOC) methods with automatic differentiation with JAX.
 Aimed at resource efficient computation.
 
-We use a top-down approach to make the codebase modular. 
-Each module interacts only with the module above it in hierarchy. 
+ParaQeet is organized as a stack of layers. Each layer interacts only with the
+layer before it in the hierarchy, which keeps the codebase modular: you can swap
+a pulse parametrization, a propagator, or an optimizer without touching the
+rest of the setup. The codebase follows the modular structure shown below:
 
 <div align="center">
   <center><img src="https://jugit.fz-juelich.de/pgi-12-external/qfc/paraqeet/-/raw/main/docs/layers.svg" alt="Layers" width="90%"/></center>

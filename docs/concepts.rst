@@ -4,7 +4,7 @@ Concepts and architecture
 =========================
 
 ParaQeet is organized as a stack of layers. Each layer interacts only with the
-layer above it in the hierarchy, which keeps the codebase modular: you can swap
+layer before it in the hierarchy, which keeps the codebase modular: you can swap
 a pulse parametrization, a propagator, or an optimizer without touching the
 rest of the setup. The codebase follows the modular structure shown below:
 
