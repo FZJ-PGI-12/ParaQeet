@@ -16,7 +16,7 @@
 
 *Note: This is a preview version, a 1.0.0 release is forthcoming.*
 
->[!NOTE]
+>[!note]
 > Development happens on [JuGit](https://jugit.fz-juelich.de/pgi-12-external/qfc/paraqeet). The [GitHub repository](https://github.com/FZJ-PGI-12/paraqeet) is a read-only mirror, so please open issues and merge requests on JuGit.
 
 
