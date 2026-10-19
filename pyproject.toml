@@ -39,7 +39,7 @@ dependencies = [
 [tool.sphinx-pyproject]
 author = "PGI-12"
 project = "paraqeet"
-copyright = "PGI-12"
+copyright = "Forschungszentrum Jülich GmbH"
 
 [project.optional-dependencies]
 dev = [

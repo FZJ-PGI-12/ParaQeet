@@ -16,7 +16,7 @@
 
 *Note: This is a preview version, a 1.0.0 release is forthcoming.*
 
->[!NOTE]
+>[!note]
 > Development happens on [JuGit](https://jugit.fz-juelich.de/pgi-12-external/qfc/paraqeet). The [GitHub repository](https://github.com/FZJ-PGI-12/paraqeet) is a read-only mirror, so please open issues and merge requests on JuGit.
 
 
@@ -29,7 +29,7 @@ We use a top-down approach to make the codebase modular.
 Each module interacts only with the module above it in hierarchy. 
 
 <div align="center">
-  <center><img src="https://jugit.fz-juelich.de/pgi-12-external/qfc/paraqeet/-/raw/main/docs/layers.png" alt="Layers" width="40%"/></center>
+  <center><img src="https://jugit.fz-juelich.de/pgi-12-external/qfc/paraqeet/-/raw/main/docs/layers.svg" alt="Layers" width="90%"/></center>
 </div>
 
 Currently implemented QOC methods:
