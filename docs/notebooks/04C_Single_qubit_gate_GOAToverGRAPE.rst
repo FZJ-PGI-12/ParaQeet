@@ -227,7 +227,7 @@ Optimization
     
     goat = GOATOverGRAPE(zeroone, propagation_resolution=propagation.resolution, generators=[gen])
     
-    optgrad = ScipyOptimizerGradient(measure_and_gradient_func=goat.get_value_and_gradient, optimization_map=optmap)
+    optgrad = ScipyOptimizerGradient(measure_func=goat.get_value, measure_and_gradient_func=goat.get_value_and_gradient, optimization_map=optmap)
 
 .. code:: ipython3
 

@@ -197,6 +197,7 @@ Here we add the parameters from the ``DCRABEnvelope`` to the ``optmap``
     
     goat = GOATOverGRAPE(zeroone, gen, propagation.resolution)
     opt_grad = DCRABOptimizerGradient(
+        measure_func=goat.get_value,
         measure_and_gradient_func=goat.get_value_and_gradient,
         optimization_map=optmap,
         super_iteration_every=150,

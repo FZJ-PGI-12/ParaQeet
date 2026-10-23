@@ -264,7 +264,7 @@ function) with the updated ``hamiltonian_and_gradient_func``.
     
     optmap = OptimizationMap()
     optmap.add(cos_env)
-    opt = ScipyOptimizerGradient(measure_and_gradient_func=zeroone.get_value_and_gradient, optimization_map=optmap)
+    opt = ScipyOptimizerGradient(measure_func=zeroone.get_value, measure_and_gradient_func=zeroone.get_value_and_gradient, optimization_map=optmap)
 
 .. code:: ipython3
 

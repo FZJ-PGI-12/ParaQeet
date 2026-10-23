@@ -447,7 +447,7 @@ The only optimizable parameter is the frequency of transmon 1.
     optmap.add(tone1)
     print(optmap)
     
-    opt = ScipyOptimizerGradient(measure_and_gradient_func=gate_fid.get_value_and_gradient, optimization_map=optmap)
+    opt = ScipyOptimizerGradient(measure_func=gate_fid.get_value, measure_and_gradient_func=gate_fid.get_value_and_gradient, optimization_map=optmap)
     opt.set_options({"ftol": 0.1, "maxls": 50, "gtol": 1e-8})
 
 

@@ -169,7 +169,7 @@ frequency, as in the state transfer example.
     
     optmap = OptimizationMap()
     optmap.add(gen, params)
-    opt = ScipyOptimizerGradient(measure_and_gradient_func=zeroone.get_value_and_gradient, optimization_map=optmap)
+    opt = ScipyOptimizerGradient(measure_func=zeroone.get_value, measure_and_gradient_func=zeroone.get_value_and_gradient, optimization_map=optmap)
 
 .. code:: ipython3
 

@@ -174,7 +174,11 @@ def opt(coupled_transmons):
 def grad_opt(coupled_transmons):
     """Return Scipy optimizer gradient."""
     measure, optmap = coupled_transmons
-    opt = ScipyOptimizerGradient(measure_and_gradient_func=measure.get_value_and_gradient, optimization_map=optmap)
+    opt = ScipyOptimizerGradient(
+        measure_func=measure.get_value,
+        measure_and_gradient_func=measure.get_value_and_gradient,
+        optimization_map=optmap,
+    )
     opt.set_options({"maxiter": 2})
     return opt
 

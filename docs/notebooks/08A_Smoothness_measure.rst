@@ -74,7 +74,7 @@ We can check that the gradient has the correct shape
 
 .. code:: ipython3
 
-    opt = ScipyOptimizerGradient(measure_and_gradient_func=smoothness.get_value_and_gradient, optimization_map=optmap)
+    opt = ScipyOptimizerGradient(measure_func=smoothness.get_value, measure_and_gradient_func=smoothness.get_value_and_gradient, optimization_map=optmap)
     max_iter = 200
     opt.set_options({"maxiter": max_iter})
 

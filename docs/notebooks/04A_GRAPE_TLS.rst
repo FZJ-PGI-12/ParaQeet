@@ -143,7 +143,7 @@ As a simple toy model, we use a single spin.
     optmap.add(gen)
     optmap.register_params_with_optimizables()
     
-    opt_grad = ScipyOptimizerGradient(measure_and_gradient_func=zeroone.get_value_and_gradient, optimization_map=optmap)
+    opt_grad = ScipyOptimizerGradient(measure_func=zeroone.get_value, measure_and_gradient_func=zeroone.get_value_and_gradient, optimization_map=optmap)
 
 Unlike the previous examples, for GRAPE based optimization, we need to
 specify the exact time grid used to discretize the signal for
@@ -326,7 +326,7 @@ Let’s test GRAPE with ODE propagation
 
 .. code:: ipython3
 
-    opt_grad = ScipyOptimizerGradient(measure_and_gradient_func=zeroone.get_value_and_gradient, optimization_map=optmap)
+    opt_grad = ScipyOptimizerGradient(measure_func=zeroone.get_value, measure_and_gradient_func=zeroone.get_value_and_gradient, optimization_map=optmap)
 
 .. code:: ipython3
 

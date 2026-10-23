@@ -442,7 +442,7 @@ which are quite poor! We now proceed with the pulse optimization.
     optmap = OptimizationMap()
     optmap.add(gen_res, gen_res.get_parameters())
     optmap.add(gen_qubit, gen_qubit.get_parameters())
-    opt = ScipyOptimizerGradient(measure_and_gradient_func=goal.get_value_and_gradient, optimization_map=optmap)
+    opt = ScipyOptimizerGradient(measure_func=goal.get_value, measure_and_gradient_func=goal.get_value_and_gradient, optimization_map=optmap)
     opt.set_options({"maxfun": max_iter})
     optmap.register_params_with_optimizables()
 
@@ -703,7 +703,7 @@ truncation numbers
     optmap = OptimizationMap()
     optmap.add(gen_res, gen_res.get_parameters())
     optmap.add(gen_qubit, gen_qubit.get_parameters())
-    opt = ScipyOptimizerGradient(measure_and_gradient_func=goal.get_value_and_gradient, optimization_map=optmap)
+    opt = ScipyOptimizerGradient(measure_func=goal.get_value, measure_and_gradient_func=goal.get_value_and_gradient, optimization_map=optmap)
     opt.set_options({"maxfun": max_iter})
     optmap.register_params_with_optimizables()
 

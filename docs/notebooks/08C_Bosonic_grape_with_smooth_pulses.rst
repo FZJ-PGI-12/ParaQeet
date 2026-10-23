@@ -406,7 +406,8 @@ we can later use to plot the infidelity vs function evaluation.
     
     # Define the optimizer
     opt = DCRABOptimizerGradient(
-        measure_and_gradient_func=dcrab_goal.get_value_and_gradient,
+        measure_func=goat.get_value,
+        measure_and_gradient_func=goat.get_value_and_gradient,
         optimization_map=optmap,
         super_iteration_every=100,
         max_super_iteration_num=2,
@@ -875,7 +876,8 @@ Redefine the optmap and the optimizer and rerun the optimization
     
     # Define the optimizer
     opt = DCRABOptimizerGradient(
-        measure_and_gradient_func=dcrab_goal.get_value_and_gradient,
+        measure_func=goat.get_value,
+        measure_and_gradient_func=goat.get_value_and_gradient,
         optimization_map=optmap,
         super_iteration_every=100,
         max_super_iteration_num=3,  # Increase the number of super iterations for a better result

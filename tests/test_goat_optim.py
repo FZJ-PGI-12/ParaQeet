@@ -144,13 +144,17 @@ def opt_map(gen):
 @pytest.fixture
 def grad_opt(states, opt_map):
     """Create a scipy optimizer gradient object over states."""
-    return ScipyOptimizerGradient(measure_and_gradient_func=states.get_value_and_gradient, optimization_map=opt_map)
+    return ScipyOptimizerGradient(
+        measure_func=states.get_value, measure_and_gradient_func=states.get_value_and_gradient, optimization_map=opt_map
+    )
 
 
 @pytest.fixture
 def grad_gates_opt(gates, opt_map):
     """Create a scipy optimizer gradient object over gates."""
-    return ScipyOptimizerGradient(measure_and_gradient_func=gates.get_value_and_gradient, optimization_map=opt_map)
+    return ScipyOptimizerGradient(
+        measure_func=gates.get_value, measure_and_gradient_func=gates.get_value_and_gradient, optimization_map=opt_map
+    )
 
 
 @pytest.fixture

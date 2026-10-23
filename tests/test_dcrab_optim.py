@@ -101,6 +101,7 @@ def opt_grad(tone, fid, gen, propagation):
 
     goat = GOATOverGRAPE(fid, generators=[gen], propagation_resolution=propagation.resolution)
     opt_grad = DCRABOptimizerGradient(
+        measure_func=goat.get_value,
         measure_and_gradient_func=goat.get_value_and_gradient,
         optimization_map=optmap,
         super_iteration_every=150,
