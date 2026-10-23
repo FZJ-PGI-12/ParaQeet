@@ -219,7 +219,7 @@ Optimization
 
     from paraqeet.measurement.goat_over_grape import GOATOverGRAPE
     from paraqeet.optimization_map import OptimizationMap
-    from paraqeet.optimizers.scipy_optimizer_gradient import ScipyOptimizerGradient
+    from paraqeet.optimizers.scipy_optimizer import ScipyOptimizerGradient
     
     optmap = OptimizationMap()
     optmap.add(filtered_tone)

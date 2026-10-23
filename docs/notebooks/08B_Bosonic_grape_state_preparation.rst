@@ -111,7 +111,7 @@ the resonator and qubit pulses, respectively.
     from paraqeet.measurement.smoothness import Smoothness
     from paraqeet.measurement.weighted_sum_goal import WeightedSumGoal
     from paraqeet.optimization_map import OptimizationMap
-    from paraqeet.optimizers.scipy_optimizer_gradient import ScipyOptimizerGradient
+    from paraqeet.optimizers.scipy_optimizer import ScipyOptimizerGradient
     from paraqeet.propagation import GRAPE, Expm
     from paraqeet.quantity import Quantity
     from paraqeet.signal.envelopes import GaussEnvelope

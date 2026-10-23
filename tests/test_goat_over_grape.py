@@ -19,7 +19,7 @@ from paraqeet.measurement.fidelity import (
 from paraqeet.measurement.goat_over_grape import GOATOverGRAPE
 from paraqeet.measurement.utils import overlap_state_vector, state_fidelity
 from paraqeet.optimization_map import OptimizationMap
-from paraqeet.optimizers.scipy_optimizer_gradient import ScipyOptimizerGradient
+from paraqeet.optimizers.scipy_optimizer import ScipyOptimizerGradient
 from paraqeet.propagation.expm import Expm
 from paraqeet.propagation.grape import GRAPE
 from paraqeet.propagation.utils import grape_operator_sandwich_function_closed

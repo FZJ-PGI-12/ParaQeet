@@ -16,7 +16,7 @@ Gradient-based optimization of a cross-resonance gate between two transmons
     from paraqeet.hamiltonian.utils import sigma_x, sigma_y, sigma_z
     from paraqeet.measurement.fidelity import UnitaryFidelity
     from paraqeet.optimization_map import OptimizationMap
-    from paraqeet.optimizers.scipy_optimizer_gradient import ScipyOptimizerGradient
+    from paraqeet.optimizers.scipy_optimizer import ScipyOptimizerGradient
     from paraqeet.propagation import GOAT, Expm
     from paraqeet.propagation.propagation import Propagation
     from paraqeet.quantity import Quantity

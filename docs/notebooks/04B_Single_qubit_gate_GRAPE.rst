@@ -165,7 +165,7 @@ frequency, as in the state transfer example.
 .. code:: ipython3
 
     from paraqeet.optimization_map import OptimizationMap
-    from paraqeet.optimizers.scipy_optimizer_gradient import ScipyOptimizerGradient
+    from paraqeet.optimizers.scipy_optimizer import ScipyOptimizerGradient
     
     optmap = OptimizationMap()
     optmap.add(gen, params)

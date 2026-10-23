@@ -17,7 +17,7 @@ from paraqeet.measurement.utils import (
     state_fidelity,
 )
 from paraqeet.optimization_map import OptimizationMap
-from paraqeet.optimizers.scipy_optimizer_gradient import ScipyOptimizerGradient
+from paraqeet.optimizers.scipy_optimizer import ScipyOptimizerGradient
 from paraqeet.propagation.expm import Expm
 from paraqeet.propagation.grape import GRAPE
 from paraqeet.propagation.utils import (

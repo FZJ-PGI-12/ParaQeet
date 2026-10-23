@@ -10,8 +10,7 @@ from paraqeet.hamiltonian.coupling import Coupling
 from paraqeet.hamiltonian.drive import Drive
 from paraqeet.hamiltonian.transmon import TransmonHamiltonian
 from paraqeet.optimization_map import OptimizationMap
-from paraqeet.optimizers.scipy_optimizer import ScipyOptimizer
-from paraqeet.optimizers.scipy_optimizer_gradient import ScipyOptimizerGradient
+from paraqeet.optimizers.scipy_optimizer import ScipyOptimizer, ScipyOptimizerGradient
 from paraqeet.propagation.expm import Expm
 from paraqeet.propagation.goat import GOAT
 from paraqeet.quantity import Quantity

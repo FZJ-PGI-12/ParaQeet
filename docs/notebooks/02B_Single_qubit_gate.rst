@@ -15,7 +15,7 @@ single-qubit gate, specifically an :math:`X`-gate.
     from paraqeet.measurement.fidelity import UnitaryFidelity
     from paraqeet.optimization_map import OptimizationMap
     from paraqeet.optimizers.scipy_optimizer import ScipyOptimizer
-    from paraqeet.optimizers.scipy_optimizer_gradient import ScipyOptimizerGradient
+    from paraqeet.optimizers.scipy_optimizer import ScipyOptimizerGradient
     from paraqeet.propagation import GOAT, Expm
     from paraqeet.quantity import Quantity
     from paraqeet.signal.envelopes import ConstantEnvelope

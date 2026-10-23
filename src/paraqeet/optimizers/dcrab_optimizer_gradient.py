@@ -11,7 +11,7 @@ from scipy.optimize import OptimizeResult, minimize
 from paraqeet.exceptions import ConfigurationException, IncompatibleOptimizationMap
 from paraqeet.optimization_map import OptimizationMap
 from paraqeet.optimizers.optimizer import OptimizationResult, Optimizer
-from paraqeet.optimizers.scipy_optimizer_gradient import ScipyOptimizerGradient
+from paraqeet.optimizers.scipy_optimizer import ScipyOptimizerGradient
 from paraqeet.quantity import Array, Float, Quantity
 from paraqeet.signal.envelopes import DCRABEnvelope
 from paraqeet.signal.signal import DRAGMixer
@@ -59,6 +59,7 @@ class DCRABOptimizerGradient(ScipyOptimizerGradient):
 
     def __init__(
         self,
+        measure_func: Callable[[Array], Float],
         measure_and_gradient_func: Callable[[Array], tuple[Float, Array]],
         optimization_map: OptimizationMap,
         super_iteration_every: int = 30,
@@ -86,7 +87,7 @@ class DCRABOptimizerGradient(ScipyOptimizerGradient):
                 Defaults to 1e-7.
             seed: Random seed for adding new dCRAB components.
         """
-        super().__init__(measure_and_gradient_func, optimization_map)
+        super().__init__(measure_func, measure_and_gradient_func, optimization_map)
         self._super_iteration_every = super_iteration_every
         self._max_super_iteration_num = max_super_iteration_num
         self._num_print_every = print_every_iteration_num

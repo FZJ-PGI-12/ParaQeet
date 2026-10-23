@@ -15,7 +15,7 @@ for a single spin or qubit.
     from paraqeet.hamiltonian.qubit import QubitHamiltonian
     from paraqeet.measurement.utils import gate_fidelity, overlap_state_vector
     from paraqeet.optimization_map import OptimizationMap
-    from paraqeet.optimizers.scipy_optimizer_gradient import ScipyOptimizerGradient
+    from paraqeet.optimizers.scipy_optimizer import ScipyOptimizerGradient
     from paraqeet.quantity import Quantity
     from paraqeet.signal.envelopes import ConstantEnvelope
     from paraqeet.signal.iq_mixer import IQMixer

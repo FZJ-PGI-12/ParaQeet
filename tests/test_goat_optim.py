@@ -11,8 +11,7 @@ from paraqeet.hamiltonian.qubit import Qubit, QubitHamiltonian
 from paraqeet.measurement.fidelity import Fidelity
 from paraqeet.measurement.utils import overlap_state_vector, overlap_vectorized_density_matrix, state_fidelity
 from paraqeet.optimization_map import OptimizationMap
-from paraqeet.optimizers.scipy_optimizer import ScipyOptimizer
-from paraqeet.optimizers.scipy_optimizer_gradient import ScipyOptimizerGradient
+from paraqeet.optimizers.scipy_optimizer import ScipyOptimizer, ScipyOptimizerGradient
 from paraqeet.propagation.expm import Expm
 from paraqeet.propagation.goat import GOAT
 from paraqeet.propagation.utils import convert_dm_to_vec
