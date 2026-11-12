@@ -11,8 +11,7 @@ from paraqeet.hamiltonian.qubit import Qubit, QubitHamiltonian
 from paraqeet.measurement.fidelity import Fidelity
 from paraqeet.measurement.utils import overlap_state_vector, overlap_vectorized_density_matrix, state_fidelity
 from paraqeet.optimization_map import OptimizationMap
-from paraqeet.optimizers.scipy_optimizer import ScipyOptimizer
-from paraqeet.optimizers.scipy_optimizer_gradient import ScipyOptimizerGradient
+from paraqeet.optimizers.scipy_optimizer import ScipyOptimizer, ScipyOptimizerGradient
 from paraqeet.propagation.expm import Expm
 from paraqeet.propagation.goat import GOAT
 from paraqeet.propagation.utils import convert_dm_to_vec
@@ -108,7 +107,7 @@ def states(prop, mode):
 
     return Fidelity(
         propagation_func=prop.get_value,
-        propagation_gradient_func=prop.get_gradient,
+        propagation_and_gradient_func=prop.get_value_and_gradient,
         target_states=target,
         overlap=overlap_func,
         fid=fid_func,
@@ -125,7 +124,7 @@ def gates(propagation, prop, mode):
     expm.initial_state = np.identity(2)
     return UnitaryFidelity(
         propagation_func=prop.get_value,
-        propagation_gradient_func=prop.get_gradient,
+        propagation_and_gradient_func=prop.get_value_and_gradient,
         gate=pauli_x,
     )
 
@@ -145,13 +144,17 @@ def opt_map(gen):
 @pytest.fixture
 def grad_opt(states, opt_map):
     """Create a scipy optimizer gradient object over states."""
-    return ScipyOptimizerGradient(measure_and_gradient_func=states.get_value_and_gradient, optimization_map=opt_map)
+    return ScipyOptimizerGradient(
+        measure_func=states.get_value, measure_and_gradient_func=states.get_value_and_gradient, optimization_map=opt_map
+    )
 
 
 @pytest.fixture
 def grad_gates_opt(gates, opt_map):
     """Create a scipy optimizer gradient object over gates."""
-    return ScipyOptimizerGradient(measure_and_gradient_func=gates.get_value_and_gradient, optimization_map=opt_map)
+    return ScipyOptimizerGradient(
+        measure_func=gates.get_value, measure_and_gradient_func=gates.get_value_and_gradient, optimization_map=opt_map
+    )
 
 
 @pytest.fixture

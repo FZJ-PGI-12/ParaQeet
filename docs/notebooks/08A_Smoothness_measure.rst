@@ -1,7 +1,8 @@
 Constrain piece-wise constant pulses to vary smoothly
 =====================================================
 
-The smoothness penalty follows the definition of (Heeres et al., 2017).
+The smoothness penalty follows the definition of (Heeres et al., 2017)
+:cite:p:`heeres2017implementing`.
 
 .. code:: ipython3
 
@@ -10,7 +11,7 @@ The smoothness penalty follows the definition of (Heeres et al., 2017).
     
     from paraqeet.measurement.smoothness import Smoothness
     from paraqeet.optimization_map import OptimizationMap
-    from paraqeet.optimizers.scipy_optimizer_gradient import ScipyOptimizerGradient
+    from paraqeet.optimizers.scipy_optimizer import ScipyOptimizerGradient
     from paraqeet.quantity import Quantity
     from paraqeet.signal.envelopes import GaussEnvelope
     from paraqeet.signal.pwc_generator import PWCGenerator
@@ -73,7 +74,7 @@ We can check that the gradient has the correct shape
 
 .. code:: ipython3
 
-    opt = ScipyOptimizerGradient(measure_and_gradient_func=smoothness.get_value_and_gradient, optimization_map=optmap)
+    opt = ScipyOptimizerGradient(measure_func=smoothness.get_value, measure_and_gradient_func=smoothness.get_value_and_gradient, optimization_map=optmap)
     max_iter = 200
     opt.set_options({"maxiter": max_iter})
 
@@ -91,7 +92,7 @@ We can check that the gradient has the correct shape
 
 .. parsed-literal::
 
-    {'status': 1, 'value': 1.1649151643311484e-09, 'iterations': 20, 'message': 'CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL'}
+    {'status': 1, 'value': 1.1649151643311484e-09, 'iterations': 13, 'evaluations': 20, 'message': 'CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL'}
 
 
 
@@ -144,6 +145,6 @@ As expected, we obtain a flat pulse.
 References
 ----------
 
--  **(Heeres et al., 2017)** R. W. Heeres et al., “Implementing a
-   universal gate set on a logical qubit encoded in an oscillator,”
-   *Nature Communications* **8**, 94 (2017).
+- **(Heeres et al., 2017)** R. W. Heeres et al., “Implementing a
+  universal gate set on a logical qubit encoded in an oscillator,”
+  *Nature Communications* **8**, 94 (2017).

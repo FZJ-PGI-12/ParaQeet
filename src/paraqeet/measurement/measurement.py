@@ -50,8 +50,8 @@ class CostFunction(Measurement):
         pass
 
 
-class DifferentiableNormalizableMeasurement(Protocol):
-    """Protocol for a class that is both NormalizableMeasurement and Differentiable.
+class DifferentiableCostFunction(Protocol):
+    """Protocol for a class that is both CostFuction and Differentiable.
 
     Note:
         Only used for type-hinting, not to be used as a base class.

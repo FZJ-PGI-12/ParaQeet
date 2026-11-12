@@ -15,7 +15,7 @@ for a single spin or qubit.
     from paraqeet.hamiltonian.qubit import QubitHamiltonian
     from paraqeet.measurement.utils import gate_fidelity, overlap_state_vector
     from paraqeet.optimization_map import OptimizationMap
-    from paraqeet.optimizers.scipy_optimizer_gradient import ScipyOptimizerGradient
+    from paraqeet.optimizers.scipy_optimizer import ScipyOptimizerGradient
     from paraqeet.quantity import Quantity
     from paraqeet.signal.envelopes import ConstantEnvelope
     from paraqeet.signal.iq_mixer import IQMixer
@@ -142,7 +142,7 @@ and configure a state transfer problem from :math:`\ket{0}` to
     
     zeroone = Fidelity(
         propagation_func=prop_AD.get_value,
-        propagation_gradient_func=prop_AD.get_gradient,
+        propagation_and_gradient_func=prop_AD.get_value_and_gradient,
         target_states=target,
         overlap=overlap_state_vector,
         fid=gate_fidelity,
@@ -193,7 +193,7 @@ and the parameters of the cosine tone.
 
     optmap = OptimizationMap()
     optmap.add(gen, [params_gen[0], params_gen[2]])
-    opt = ScipyOptimizerGradient(measure_and_gradient_func=zeroone.get_value_and_gradient, optimization_map=optmap)
+    opt = ScipyOptimizerGradient(measure_func=zeroone.get_value, measure_and_gradient_func=zeroone.get_value_and_gradient, optimization_map=optmap)
 
 One might think that the gradient associated with ``qubit_hamiltonian``
 would not be empty, but instead
@@ -268,7 +268,7 @@ We can now run the optimization as
 
 .. parsed-literal::
 
-    {'status': 1, 'value': 5.020428517354958e-13, 'iterations': 11, 'message': 'CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH'}
+    {'status': 1, 'value': 5.020428517354958e-13, 'iterations': 7, 'evaluations': 11, 'message': 'CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH'}
 
 
 The new optimal parameters are

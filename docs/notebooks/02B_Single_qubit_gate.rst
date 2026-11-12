@@ -15,7 +15,7 @@ single-qubit gate, specifically an :math:`X`-gate.
     from paraqeet.measurement.fidelity import UnitaryFidelity
     from paraqeet.optimization_map import OptimizationMap
     from paraqeet.optimizers.scipy_optimizer import ScipyOptimizer
-    from paraqeet.optimizers.scipy_optimizer_gradient import ScipyOptimizerGradient
+    from paraqeet.optimizers.scipy_optimizer import ScipyOptimizerGradient
     from paraqeet.propagation import GOAT, Expm
     from paraqeet.quantity import Quantity
     from paraqeet.signal.envelopes import ConstantEnvelope
@@ -117,7 +117,7 @@ identity at time :math:`0`.
     )
     gate_fid = UnitaryFidelity(
         propagation_func=prop.get_value,
-        propagation_gradient_func=prop.get_gradient,
+        propagation_and_gradient_func=prop.get_value_and_gradient,
         gate=sigma_x,
     )
 
@@ -161,7 +161,7 @@ frequency, as in the state transfer example.
 
     optmap = OptimizationMap()
     optmap.add(gen, [params_gen[0], params_gen[2]])
-    opt = ScipyOptimizerGradient(measure_and_gradient_func=gate_fid.get_value_and_gradient, optimization_map=optmap)
+    opt = ScipyOptimizerGradient(measure_func=gate_fid.get_value, measure_and_gradient_func=gate_fid.get_value_and_gradient, optimization_map=optmap)
 
 .. code:: ipython3
 
@@ -177,7 +177,7 @@ frequency, as in the state transfer example.
 
 .. parsed-literal::
 
-    {'status': 1, 'value': 0.8036766363151119, 'iterations': 16, 'message': 'CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL'}
+    {'status': 1, 'value': 0.8036766363151119, 'iterations': 11, 'evaluations': 16, 'message': 'CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL'}
 
 
 
@@ -276,6 +276,10 @@ our drive to shift and include the phase parameter in the optimization.
 .. parsed-literal::
 
     Iteration   10 | Infid = 2.374870e-01
+
+
+.. parsed-literal::
+
     Iteration   20 | Infid = 1.151436e-09
 
 
@@ -283,7 +287,7 @@ our drive to shift and include the phase parameter in the optimization.
 
 .. parsed-literal::
 
-    {'status': 1, 'value': 8.832046205498045e-12, 'iterations': 108, 'message': 'CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH'}
+    {'status': 1, 'value': 8.832046205498045e-12, 'iterations': 21, 'evaluations': 108, 'message': 'CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH'}
 
 
 

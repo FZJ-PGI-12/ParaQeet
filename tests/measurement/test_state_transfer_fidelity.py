@@ -23,7 +23,7 @@ def test_limits_vectors(random_state):
         times = np.array([0.0, 1.0])
         measurement = Fidelity(
             propagation_func=propagation.get_value,
-            propagation_gradient_func=propagation.get_gradient,
+            propagation_and_gradient_func=propagation.get_value_and_gradient,
             target_states=target_state,
             overlap=overlap_state_vector,
             fid=state_fidelity,
@@ -46,7 +46,7 @@ def test_vector_equality(identity_propagation, random_state):
             identity_propagation.set_initial_state(state)
             measurement = Fidelity(
                 propagation_func=identity_propagation.get_value,
-                propagation_gradient_func=identity_propagation.get_gradient,
+                propagation_and_gradient_func=identity_propagation.get_gradient,
                 target_states=state,
                 overlap=overlap_state_vector,
                 fid=state_fidelity,
@@ -80,7 +80,7 @@ def test_incompatible_shape(identity_propagation, random_state):
 
             fid = Fidelity(
                 propagation_func=identity_propagation.get_value,
-                propagation_gradient_func=identity_propagation.get_gradient,
+                propagation_and_gradient_func=identity_propagation.get_gradient,
                 target_states=targetState,
                 overlap=overlap_state_vector,
                 fid=state_fidelity,

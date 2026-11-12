@@ -84,7 +84,7 @@ def fid(prop):
 
     zeroone = FidelityGRAPE(
         propagation_func=prop.get_value,
-        propagation_gradient_func=prop.get_gradient,
+        propagation_and_gradient_func=prop.get_value_and_gradient,
         target_states=target,
         overlap=overlap_state_vector,
         fid=state_fidelity,
@@ -101,6 +101,7 @@ def opt_grad(tone, fid, gen, propagation):
 
     goat = GOATOverGRAPE(fid, generators=[gen], propagation_resolution=propagation.resolution)
     opt_grad = DCRABOptimizerGradient(
+        measure_func=goat.get_value,
         measure_and_gradient_func=goat.get_value_and_gradient,
         optimization_map=optmap,
         super_iteration_every=150,

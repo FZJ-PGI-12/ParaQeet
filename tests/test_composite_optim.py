@@ -10,8 +10,7 @@ from paraqeet.hamiltonian.coupling import Coupling
 from paraqeet.hamiltonian.drive import Drive
 from paraqeet.hamiltonian.transmon import TransmonHamiltonian
 from paraqeet.optimization_map import OptimizationMap
-from paraqeet.optimizers.scipy_optimizer import ScipyOptimizer
-from paraqeet.optimizers.scipy_optimizer_gradient import ScipyOptimizerGradient
+from paraqeet.optimizers.scipy_optimizer import ScipyOptimizer, ScipyOptimizerGradient
 from paraqeet.propagation.expm import Expm
 from paraqeet.propagation.goat import GOAT
 from paraqeet.quantity import Quantity
@@ -152,7 +151,7 @@ def coupled_transmons(tone):
     cr_gate = pauli_zx @ cr_gate
     gate_fid = UnitaryFidelity(
         propagation_func=prop.get_value,
-        propagation_gradient_func=prop.get_gradient,
+        propagation_and_gradient_func=prop.get_value_and_gradient,
         gate=cr_gate,
     )
     tone1_amp = tone1.get_parameters()[0]
@@ -175,7 +174,11 @@ def opt(coupled_transmons):
 def grad_opt(coupled_transmons):
     """Return Scipy optimizer gradient."""
     measure, optmap = coupled_transmons
-    opt = ScipyOptimizerGradient(measure_and_gradient_func=measure.get_value_and_gradient, optimization_map=optmap)
+    opt = ScipyOptimizerGradient(
+        measure_func=measure.get_value,
+        measure_and_gradient_func=measure.get_value_and_gradient,
+        optimization_map=optmap,
+    )
     opt.set_options({"maxiter": 2})
     return opt
 

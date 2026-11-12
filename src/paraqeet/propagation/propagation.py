@@ -351,12 +351,3 @@ class DifferentiablePropagation(Differentiable):
             times: Array of time steps.
         """
         pass
-
-    @override
-    def get_value_and_gradient(self, times: Array) -> tuple[Array, Array]:
-        """Return value and gradient of propagation.
-
-        Args:
-            times: Array of time points/
-        """
-        return self.get_value(times), self.get_gradient(times)

@@ -96,11 +96,6 @@ class GOATOverGRAPE(CostFunction, Differentiable):
         return self.get_value(times=times)
 
     @override
-    def get_gradient(self, times: Array) -> Array:
-        _, gradient = self.get_value_and_gradient(times)
-        return gradient
-
-    @override
     def get_value_and_gradient(self, times: Array) -> tuple[Array, Array]:
         """Compute gradients with GRAPE and use the chain rule
         to provide the gradients for the optimizer.

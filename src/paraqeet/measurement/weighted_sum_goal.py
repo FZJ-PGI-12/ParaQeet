@@ -8,21 +8,21 @@ import numpy as np
 
 from paraqeet.differentiable import Differentiable
 from paraqeet.exceptions import ConfigurationException
-from paraqeet.measurement.measurement import CostFunction, DifferentiableNormalizableMeasurement
+from paraqeet.measurement.measurement import CostFunction, DifferentiableCostFunction
 from paraqeet.quantity import Array, Float
 
 
 class WeightedSumGoal(CostFunction, Differentiable):
     """Combine multiple measurements into a single goal function."""
 
-    _measurements: list[DifferentiableNormalizableMeasurement]
+    _measurements: list[DifferentiableCostFunction]
     _weights: Array
     _sum_of_squares_options: dict | None
-    _measurements_in_sum_of_squares: list[DifferentiableNormalizableMeasurement]
+    _measurements_in_sum_of_squares: list[DifferentiableCostFunction]
 
     def __init__(
         self,
-        measurements: list[DifferentiableNormalizableMeasurement],
+        measurements: list[DifferentiableCostFunction],
         weights: Array,
         sum_of_squares_options: dict | None = None,
     ) -> None:
@@ -78,7 +78,7 @@ class WeightedSumGoal(CostFunction, Differentiable):
                 )
 
     @property
-    def measurements(self) -> list[DifferentiableNormalizableMeasurement]:
+    def measurements(self) -> list[DifferentiableCostFunction]:
         """Return the list of measurements."""
         return self._measurements
 
@@ -93,7 +93,7 @@ class WeightedSumGoal(CostFunction, Differentiable):
         return self._sum_of_squares_options
 
     @property
-    def measurements_in_sum_of_squares(self) -> list[DifferentiableNormalizableMeasurement]:
+    def measurements_in_sum_of_squares(self) -> list[DifferentiableCostFunction]:
         """Return the list of measurements included in the sum of square difference cost function."""
         return self._measurements_in_sum_of_squares
 
@@ -123,7 +123,7 @@ class WeightedSumGoal(CostFunction, Differentiable):
         return jnp.array(self.get_value(times))
 
     @override
-    def get_gradient(self, times: Array) -> Array:
+    def get_value_and_gradient(self, times: Array) -> tuple[Array, Array]:
         """Sum of weighted measurements from gradient-ized measurements.
 
         Args:
@@ -152,4 +152,4 @@ class WeightedSumGoal(CostFunction, Differentiable):
                 grads_diff += 2 * (meas_a[0] - meas_b[0]) * (meas_a[1] - meas_b[1])
             sum_meas += self._sum_of_squares_options["weight"] * sum_square_diff
             sum_grads += self._sum_of_squares_options["weight"] * grads_diff
-        return sum_grads
+        return sum_meas, sum_grads

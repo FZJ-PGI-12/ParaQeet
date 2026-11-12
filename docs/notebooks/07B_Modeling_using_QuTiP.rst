@@ -1,11 +1,11 @@
 Using QuTiP with ParaQeet
 =========================
 
-In this example we demonstrate how QuTiP (Lambert et al., 2026) objects
-could be used for modeling a quantum system, and combined with ParaQeet
-for propagation and optimization tasks. Here we follow the same example
-as before, of a state preparation task, but use QuTiP functions for
-modeling the system.
+In this example we demonstrate how QuTiP (Lambert et al., 2026)
+:cite:p:`lambert2026qutip` objects could be used for modeling a quantum
+system, and combined with ParaQeet for propagation and optimization
+tasks. Here we follow the same example as before, of a state preparation
+task, but use QuTiP functions for modeling the system.
 
 .. code:: ipython3
 
@@ -187,7 +187,7 @@ Hadamard gate.
     
     zeroone = Fidelity(
         propagation_func=prop.get_value,
-        propagation_gradient_func=prop.get_gradient,
+        propagation_and_gradient_func=prop.get_value_and_gradient,
         target_states=target,
         overlap=overlap_state_vector,
         fid=gate_fidelity,
@@ -222,7 +222,7 @@ Hadamard gate.
 
 .. parsed-literal::
 
-    0.6404027521371738
+    Array(0.64, dtype=float64)
 
 
 
@@ -258,7 +258,7 @@ function) with the updated ``hamiltonian_and_gradient_func``.
     
     zeroone = Fidelity(
         propagation_func=prop.get_value,
-        propagation_gradient_func=prop.get_gradient,
+        propagation_and_gradient_func=prop.get_value_and_gradient,
         target_states=target,
         overlap=overlap_state_vector,
         fid=gate_fidelity,
@@ -273,7 +273,7 @@ function) with the updated ``hamiltonian_and_gradient_func``.
 
 .. parsed-literal::
 
-    0.6404027521371738
+    Array(0.64, dtype=float64)
 
 
 
@@ -296,11 +296,11 @@ function) with the updated ``hamiltonian_and_gradient_func``.
 .. code:: ipython3
 
     from paraqeet.optimization_map import OptimizationMap
-    from paraqeet.optimizers.scipy_optimizer_gradient import ScipyOptimizerGradient
+    from paraqeet.optimizers.scipy_optimizer import ScipyOptimizerGradient
     
     optmap = OptimizationMap()
     optmap.add(cos_env)
-    opt = ScipyOptimizerGradient(measure_and_gradient_func=zeroone.get_value_and_gradient, optimization_map=optmap)
+    opt = ScipyOptimizerGradient(measure_func=zeroone.get_value, measure_and_gradient_func=zeroone.get_value_and_gradient, optimization_map=optmap)
 
 .. code:: ipython3
 
@@ -311,7 +311,7 @@ function) with the updated ``hamiltonian_and_gradient_func``.
 
 .. parsed-literal::
 
-    {'status': 1, 'value': 3.774758283725532e-15, 'iterations': 10, 'message': 'CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL'}
+    {'status': 1, 'value': 3.774758283725532e-15, 'iterations': 7, 'evaluations': 10, 'message': 'CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL'}
 
 
 
@@ -341,12 +341,12 @@ function) with the updated ``hamiltonian_and_gradient_func``.
 
 .. parsed-literal::
 
-    0.9999999999999962
+    Array(1., dtype=float64)
 
 
 
 References
 ----------
 
--  **(Lambert et al., 2026)** N. Lambert et al., “QuTiP 5: The quantum
-   toolbox in Python,” *Physics Reports* **1153**, 1–62 (2026).
+- **(Lambert et al., 2026)** N. Lambert et al., “QuTiP 5: The quantum
+  toolbox in Python,” *Physics Reports* **1153**, 1–62 (2026).

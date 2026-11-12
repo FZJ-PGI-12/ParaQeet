@@ -17,7 +17,7 @@ from paraqeet.measurement.utils import (
     state_fidelity,
 )
 from paraqeet.optimization_map import OptimizationMap
-from paraqeet.optimizers.scipy_optimizer_gradient import ScipyOptimizerGradient
+from paraqeet.optimizers.scipy_optimizer import ScipyOptimizerGradient
 from paraqeet.propagation.expm import Expm
 from paraqeet.propagation.grape import GRAPE
 from paraqeet.propagation.utils import (
@@ -153,7 +153,7 @@ def states(model, mode, solver):
 
     return FidelityGRAPE(
         propagation_func=prop_method.get_value,
-        propagation_gradient_func=prop_method.get_gradient,
+        propagation_and_gradient_func=prop_method.get_value_and_gradient,
         target_states=target,
         overlap=overlap_func,
         fid=state_fidelity,
@@ -171,7 +171,9 @@ def opt_map(pwc_gen):
 @pytest.fixture
 def opt(states, opt_map):
     """Create a scipy optimizer gradient object over states."""
-    return ScipyOptimizerGradient(measure_and_gradient_func=states.get_value_and_gradient, optimization_map=opt_map)
+    return ScipyOptimizerGradient(
+        measure_func=states.get_value, measure_and_gradient_func=states.get_value_and_gradient, optimization_map=opt_map
+    )
 
 
 def test_optim_grape(opt) -> None:

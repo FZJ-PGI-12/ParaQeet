@@ -2,9 +2,10 @@ Single qubit gate optimization using GOAT over GRAPE
 ====================================================
 
 This example optimizes a single-qubit gate with the GOAT-over-GRAPE
-method, which combines GOAT (Machnes et al., 2018) and GRAPE (Khaneja et
-al., 2005) as a gradient-based variant of the GROUP method (Sørensen et
-al., 2018).
+method, which combines GOAT (Machnes et al., 2018)
+:cite:p:`machnes2018tunable` and GRAPE (Khaneja et al., 2005)
+:cite:p:`khaneja2005optimal` as a gradient-based variant of the GROUP
+method (Sørensen et al., 2018) :cite:p:`sorensen2018quantum`.
 
 .. code:: ipython3
 
@@ -149,7 +150,7 @@ The Hamiltonian in the rotating frame of the drive is given by -
     
     zeroone = FidelityGRAPE(
         propagation_func=prop.get_value,
-        propagation_gradient_func=prop.get_gradient,
+        propagation_and_gradient_func=prop.get_value_and_gradient,
         target_states=target,
         overlap=overlap_state_vector,
         fid=gate_fidelity,
@@ -186,7 +187,7 @@ As expected, we get a partial transfer and a low fidelity.
 
 .. parsed-literal::
 
-    0.5392859819605514
+    Array(0.539, dtype=float64)
 
 
 
@@ -218,7 +219,7 @@ Optimization
 
     from paraqeet.measurement.goat_over_grape import GOATOverGRAPE
     from paraqeet.optimization_map import OptimizationMap
-    from paraqeet.optimizers.scipy_optimizer_gradient import ScipyOptimizerGradient
+    from paraqeet.optimizers.scipy_optimizer import ScipyOptimizerGradient
     
     optmap = OptimizationMap()
     optmap.add(filtered_tone)
@@ -226,7 +227,7 @@ Optimization
     
     goat = GOATOverGRAPE(zeroone, propagation_resolution=propagation.resolution, generators=[gen])
     
-    optgrad = ScipyOptimizerGradient(measure_and_gradient_func=goat.get_value_and_gradient, optimization_map=optmap)
+    optgrad = ScipyOptimizerGradient(measure_func=goat.get_value, measure_and_gradient_func=goat.get_value_and_gradient, optimization_map=optmap)
 
 .. code:: ipython3
 
@@ -251,6 +252,10 @@ Optimization
 .. parsed-literal::
 
     Iteration   10 | Infid = 2.870565e-03
+
+
+.. parsed-literal::
+
     Iteration   20 | Infid = 2.643414e-03
 
 
@@ -258,7 +263,7 @@ Optimization
 
 .. parsed-literal::
 
-    {'status': 1, 'value': 0.002643413828831709, 'iterations': 48, 'message': 'CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH'}
+    {'status': 1, 'value': 0.002643413828831709, 'iterations': 21, 'evaluations': 48, 'message': 'CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH'}
 
 
 
@@ -282,14 +287,13 @@ Optimization
 References
 ----------
 
--  **(Khaneja et al., 2005)** N. Khaneja et al., “Optimal control of
-   coupled spin dynamics: design of NMR pulse sequences by gradient
-   ascent algorithms,” *Journal of Magnetic Resonance* **172**, 296–305
-   (2005).
--  **(Machnes et al., 2018)** S. Machnes et al., “Tunable, flexible, and
-   efficient optimization of control pulses for practical qubits,”
-   *Physical Review Letters* **120**, 150401 (2018).
--  **(Sørensen et al., 2018)** J. J. W. H. Sørensen et al., “Quantum
-   optimal control in a chopped basis: Applications in control of
-   Bose-Einstein condensates,” *Physical Review A* **98**, 022119
-   (2018).
+- **(Khaneja et al., 2005)** N. Khaneja et al., “Optimal control of
+  coupled spin dynamics: design of NMR pulse sequences by gradient
+  ascent algorithms,” *Journal of Magnetic Resonance* **172**, 296–305
+  (2005).
+- **(Machnes et al., 2018)** S. Machnes et al., “Tunable, flexible, and
+  efficient optimization of control pulses for practical qubits,”
+  *Physical Review Letters* **120**, 150401 (2018).
+- **(Sørensen et al., 2018)** J. J. W. H. Sørensen et al., “Quantum
+  optimal control in a chopped basis: Applications in control of
+  Bose-Einstein condensates,” *Physical Review A* **98**, 022119 (2018).

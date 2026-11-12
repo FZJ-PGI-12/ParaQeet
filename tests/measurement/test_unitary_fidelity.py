@@ -22,7 +22,7 @@ def test_positivity(random_unitary_matrix, random_basis_vectors):
             gate = random_unitary_matrix(dim)
             measurement = UnitaryFidelity(
                 propagation_func=propagation.get_value,
-                propagation_gradient_func=propagation.get_gradient,
+                propagation_and_gradient_func=propagation.get_gradient,
                 gate=gate,
             )
             times = np.array([1.0])
@@ -36,7 +36,7 @@ def test_positivity(random_unitary_matrix, random_basis_vectors):
             gate = random_unitary_matrix(subDim)
             measurement = UnitaryFidelity(
                 propagation_func=propagation.get_value,
-                propagation_gradient_func=propagation.get_gradient,
+                propagation_and_gradient_func=propagation.get_gradient,
                 gate=gate,
                 basis_states=basisStates,
             )
@@ -54,7 +54,7 @@ def test_equality(identity_propagation, random_unitary_matrix):
             propagation.set_initial_state(gate)
             measurement = UnitaryFidelity(
                 propagation_func=propagation.get_value,
-                propagation_gradient_func=propagation.get_gradient,
+                propagation_and_gradient_func=propagation.get_gradient,
                 gate=gate,
             )
             m = measurement.get_value(times=np.array([1.0]))
@@ -72,7 +72,7 @@ def test_projection(identity_propagation, random_basis_vectors):
             propagation.set_initial_state(gate)
             measurement = UnitaryFidelity(
                 propagation_func=propagation.get_value,
-                propagation_gradient_func=propagation.get_gradient,
+                propagation_and_gradient_func=propagation.get_gradient,
                 gate=gate,
                 basis_states=init_state,
             )
@@ -104,7 +104,7 @@ def test_incompatible_shape(identity_propagation, random_unitary_matrix):
 
             measurement = UnitaryFidelity(
                 propagation_func=propagation.get_value,
-                propagation_gradient_func=propagation.get_gradient,
+                propagation_and_gradient_func=propagation.get_gradient,
                 gate=gate,
             )
             with pytest.raises(Exception):

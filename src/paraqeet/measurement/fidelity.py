@@ -30,14 +30,14 @@ class Fidelity(CostFunction, Differentiable):
     _fid: Callable[[Array], Float]
     _overlap: Callable[[Array, Array], Array]
     _propagation_func: Callable[[Array], Array]
-    _propagation_gradient_func: Callable[[Array], Array]
+    _propagation_and_gradient_func: Callable[[Array], tuple[Array, Array]]
     _overlap_grad: Callable
     _fid_grad: Callable
 
     def __init__(
         self,
         propagation_func: Callable[[Array], Array],
-        propagation_gradient_func: Callable[[Array], Array],
+        propagation_and_gradient_func: Callable[[Array], tuple[Array, Array]],
         overlap: Callable[[Array, Array], Array],
         fid: Callable[[Array], Float],
         target_states: Array | None = None,
@@ -49,8 +49,8 @@ class Fidelity(CostFunction, Differentiable):
             propagation_func: Function that evaluates the propagation of some
                 initial state. Expected to be of the form
                 ``func(t: Array) -> states: Array``.
-            propagation_gradient_func: Function returning the gradient of the
-                propagated states.
+            _propagation_and_gradient_func: Function returning the propagation value and gradient of the
+                propagated states as a tuple.
             overlap: Overlap function of the form
                 ``overlap(final_state, target_state)``.
             target_state: Column state vector representing the target.
@@ -63,7 +63,7 @@ class Fidelity(CostFunction, Differentiable):
         if ideal_gate is not None and target_states is not None:
             raise ConfigurationException("You need to supply either an ideal_gate or target_states directly.")
         self._propagation_func = propagation_func
-        self._propagation_gradient_func = propagation_gradient_func
+        self._propagation_and_gradient_func = propagation_and_gradient_func
         self._target_states = jnp.array(target_states, dtype=jnp.complex128)
         if ideal_gate is not None:
             basis_states = basis_states or jnp.eye(ideal_gate.shape[0])
@@ -90,14 +90,9 @@ class Fidelity(CostFunction, Differentiable):
 
     @override
     def get_value(self, times: Array) -> Float:
-        states = self._propagation_func(jnp.array(times))
+        states = self._propagation_func(times)
         final_state = states[-1]
         return self._fid(self._overlap(final_state, self._target_states))
-
-    @override
-    def get_gradient(self, times: Array) -> Array:
-        """Wrapper to satisfy the interface. DEPRECATED."""
-        return self.get_value_and_gradient(times)[1]
 
     @override
     def get_value_and_gradient(self, times: Array) -> tuple[Array | Float, Array]:
@@ -109,9 +104,8 @@ class Fidelity(CostFunction, Differentiable):
         Returns:
             The gradient of shape (n_params,).
         """
-        states = self._propagation_func(times)
+        states, dg_dp_list = self._propagation_and_gradient_func(times)  # gradient of states wrt parameters
         final_states = states[-1]
-        dg_dp_list = self._propagation_gradient_func(times)  # gradient of states wrt parameters
         df_dp_list = []
         f = self._overlap(final_states, self._target_states)
         for dg_dp in dg_dp_list[-1]:
@@ -150,17 +144,11 @@ class FidelityGRAPE(Fidelity):
         Returns:
             Tuple of function value and gradient of shape (n_parameters,).
         """
-        states = self._propagation_func(times)
-        grads = self._propagation_gradient_func(times)
+        states, grads = self._propagation_and_gradient_func(times)
         final_state = states[-1]
         f = self._overlap(final_state, self._target_states)
         grads = jnp.real(self._fid_grad(f) * grads)
         return self._fid(f), grads.flatten()  # shape scalar, (n_parameters,)
-
-    @override
-    def get_gradient(self, times: Array) -> Array:
-        _, gradient = self.get_value_and_gradient(times)
-        return gradient
 
 
 class UnitaryFidelity(Fidelity):
@@ -175,12 +163,12 @@ class UnitaryFidelity(Fidelity):
 
     _target_states: Array
     _propagation_func: Callable[[Array], Array]
-    _propagation_gradient_func: Callable[[Array], Array]
+    _propagation_and_gradient_func: Callable[[Array], tuple[Array, Array]]
 
     def __init__(
         self,
         propagation_func: Callable[[Array], Array],
-        propagation_gradient_func: Callable[[Array], Array],
+        propagation_and_gradient_func: Callable[[Array], tuple[Array, Array]],
         gate: Array,
         basis_states: Array | None = None,
     ) -> None:
@@ -198,7 +186,7 @@ class UnitaryFidelity(Fidelity):
 
         """
         self._propagation_func = propagation_func
-        self._propagation_gradient_func = propagation_gradient_func
+        self._propagation_and_gradient_func = propagation_and_gradient_func
         basis_states = basis_states if basis_states is not None else jnp.eye(gate.shape[0])
         self.set_ideal_gate(gate, basis_states)
         self._fid = gate_fidelity
@@ -233,8 +221,7 @@ class UnitaryFidelity(Fidelity):
         Returns:
             Tuple of function value and gradient of shape (n_params,).
         """
-        states = self._propagation_func(times)
-        dg_dp_list = self._propagation_gradient_func(times)  # gradient of states wrt parameters
+        states, dg_dp_list = self._propagation_and_gradient_func(times)  # gradient of states wrt parameters
         overlaps = []
         for ii, s in enumerate(self._target_states.T):
             overlaps.append(jnp.vdot(s, states[-1][:, ii]))
@@ -249,8 +236,3 @@ class UnitaryFidelity(Fidelity):
             df_dp_list.append(jnp.real(f.conj() * g + f * g.conj()))  # chain rule for abs^2
 
         return self._fid(jnp.asarray(overlaps)), jnp.array(df_dp_list)  # shape scalar, (n_parameters,)
-
-    @override
-    def get_gradient(self, times: Array) -> Array:
-        _, grad = self.get_value_and_gradient(times)
-        return grad

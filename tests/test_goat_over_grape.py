@@ -19,7 +19,7 @@ from paraqeet.measurement.fidelity import (
 from paraqeet.measurement.goat_over_grape import GOATOverGRAPE
 from paraqeet.measurement.utils import overlap_state_vector, state_fidelity
 from paraqeet.optimization_map import OptimizationMap
-from paraqeet.optimizers.scipy_optimizer_gradient import ScipyOptimizerGradient
+from paraqeet.optimizers.scipy_optimizer import ScipyOptimizerGradient
 from paraqeet.propagation.expm import Expm
 from paraqeet.propagation.grape import GRAPE
 from paraqeet.propagation.utils import grape_operator_sandwich_function_closed
@@ -130,7 +130,7 @@ def fid(prop):
 
     zeroone = FidelityGRAPE(
         propagation_func=prop.get_value,
-        propagation_gradient_func=prop.get_gradient,
+        propagation_and_gradient_func=prop.get_value_and_gradient,
         overlap=overlap_state_vector,
         fid=state_fidelity,
         target_states=target,
@@ -145,7 +145,9 @@ def opt_grad(tone, fid, gen, propagation):
     optmap.register_params_with_optimizables()
 
     goat = GOATOverGRAPE(fid, generators=gen, propagation_resolution=propagation.resolution)
-    opt_grad = ScipyOptimizerGradient(measure_and_gradient_func=goat.get_value_and_gradient, optimization_map=optmap)
+    opt_grad = ScipyOptimizerGradient(
+        measure_func=goat.get_value, measure_and_gradient_func=goat.get_value_and_gradient, optimization_map=optmap
+    )
     return opt_grad
 
 

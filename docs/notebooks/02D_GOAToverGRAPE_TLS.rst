@@ -2,9 +2,10 @@ Optimal control of a single spin by using GOAT over GRAPE
 =========================================================
 
 In this introductory example we compute the gradients of analytic pulse
-shapes in GOAT (Machnes et al., 2018) by using the gradients of the time
-evolution from GRAPE (Khaneja et al., 2005). This is performed by using
-chain rule -
+shapes in GOAT (Machnes et al., 2018) :cite:p:`machnes2018tunable` by
+using the gradients of the time evolution from GRAPE (Khaneja et al.,
+2005) :cite:p:`khaneja2005optimal`. This is performed by using chain
+rule -
 
 .. math:: \frac{\partial J}{\partial p} = \sum_k \frac{\partial J}{\partial c_k} \frac{\partial c_k}{\partial p}
 
@@ -14,7 +15,8 @@ where :math:`c_k = c(t_k)` the ‘pixelated’ control pulse,
 :math:`\frac{\partial J}{\partial c_k}` are the gradients from GRAPE.
 
 The combination of GOAT and GRAPE gradients used here is a
-gradient-based variant of the GROUP method (Sørensen et al., 2018).
+gradient-based variant of the GROUP method (Sørensen et al., 2018)
+:cite:p:`sorensen2018quantum`.
 
 1. Generate a PWC pulse shape
 -----------------------------
@@ -127,7 +129,7 @@ Using GRAPE as the method to propagate and compute the gradients
     
     zeroone = FidelityGRAPE(
         propagation_func=prop.get_value,
-        propagation_gradient_func=prop.get_gradient,
+        propagation_and_gradient_func=prop.get_value_and_gradient,
         target_states=target,
         overlap=overlap_state_vector,
         fid=gate_fidelity,
@@ -142,7 +144,7 @@ Using GRAPE as the method to propagate and compute the gradients
 
 .. parsed-literal::
 
-    0.5458431639927377
+    Array(0.546, dtype=float64)
 
 
 
@@ -176,14 +178,14 @@ the GRAPE gradients to compute the gradient wrt the tone parameters
 
     from paraqeet.measurement.goat_over_grape import GOATOverGRAPE
     from paraqeet.optimization_map import OptimizationMap
-    from paraqeet.optimizers.scipy_optimizer_gradient import ScipyOptimizerGradient
+    from paraqeet.optimizers.scipy_optimizer import ScipyOptimizerGradient
     
     optmap = OptimizationMap()
     optmap.add(filtered_tone)
     optmap.register_params_with_optimizables()
     
     goat = GOATOverGRAPE(zeroone, gen, propagation.resolution)
-    opt_grad = ScipyOptimizerGradient(measure_and_gradient_func=goat.get_value_and_gradient, optimization_map=optmap)
+    opt_grad = ScipyOptimizerGradient(measure_func=goat.get_value, measure_and_gradient_func=goat.get_value_and_gradient, optimization_map=optmap)
 
 .. code:: ipython3
 
@@ -194,7 +196,7 @@ the GRAPE gradients to compute the gradient wrt the tone parameters
 
 .. parsed-literal::
 
-    {'status': 1, 'value': 3.022595507218284e-10, 'iterations': 11, 'message': 'CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH'}
+    {'status': 1, 'value': 3.022595507218284e-10, 'iterations': 4, 'evaluations': 11, 'message': 'CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH'}
 
 
 
@@ -221,14 +223,13 @@ iterations.
 References
 ----------
 
--  **(Khaneja et al., 2005)** N. Khaneja et al., “Optimal control of
-   coupled spin dynamics: design of NMR pulse sequences by gradient
-   ascent algorithms,” *Journal of Magnetic Resonance* **172**, 296–305
-   (2005).
--  **(Machnes et al., 2018)** S. Machnes et al., “Tunable, flexible, and
-   efficient optimization of control pulses for practical qubits,”
-   *Physical Review Letters* **120**, 150401 (2018).
--  **(Sørensen et al., 2018)** J. J. W. H. Sørensen et al., “Quantum
-   optimal control in a chopped basis: Applications in control of
-   Bose-Einstein condensates,” *Physical Review A* **98**, 022119
-   (2018).
+- **(Khaneja et al., 2005)** N. Khaneja et al., “Optimal control of
+  coupled spin dynamics: design of NMR pulse sequences by gradient
+  ascent algorithms,” *Journal of Magnetic Resonance* **172**, 296–305
+  (2005).
+- **(Machnes et al., 2018)** S. Machnes et al., “Tunable, flexible, and
+  efficient optimization of control pulses for practical qubits,”
+  *Physical Review Letters* **120**, 150401 (2018).
+- **(Sørensen et al., 2018)** J. J. W. H. Sørensen et al., “Quantum
+  optimal control in a chopped basis: Applications in control of
+  Bose-Einstein condensates,” *Physical Review A* **98**, 022119 (2018).

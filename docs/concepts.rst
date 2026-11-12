@@ -52,7 +52,7 @@ The modules
    reduces a propagated state to the scalar that the optimizer minimizes.
 
 **Optimizers** (:mod:`paraqeet.optimizers`)
-   Gradient-based (:class:`~paraqeet.optimizers.scipy_optimizer_gradient.ScipyOptimizerGradient`)
+   Gradient-based (:class:`~paraqeet.optimizers.scipy_optimizer.ScipyOptimizerGradient`)
    and gradient-free (CMA-ES, Bayesian) algorithms, including a gradient-based dCRAB optimizer. 
 
 Parameters: ``Quantity`` and ``OptimizationMap``

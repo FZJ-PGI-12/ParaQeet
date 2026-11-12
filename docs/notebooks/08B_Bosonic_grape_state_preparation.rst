@@ -4,16 +4,18 @@ Arbitrary bosonic state preparation using GRAPE
 In this notebook, we implement a standard application of GRAPE, namely
 the preparation of an arbitrary state of a bosonic mode, such as a
 resonant mode of a microwave cavity. In the notebook, we use GRAPE
-(Khaneja et al., 2005) and mostly follow the optimization strategy of
-(Heeres et al., 2017). The parameters are taken from (Eickbusch et al.,
-2022) Table S1, without considering the anharmonicity for simplicity and
-with the exception of the dispersive shift taken to be :math:`10` times
-larger for simulation purposes. Our starting point is the well-known
-Jaynes-Cummings Hamiltonian in the dispersive regime, which describes an
-interaction of a qubit with a single bosonic mode when the
-characteristic qubit frequency :math:`\omega_{q}` is far detuned from
-the one of the resonator :math:`\omega_{r}` (see for instance (Blais et
-al., 2021) for more details)
+(Khaneja et al., 2005) :cite:p:`khaneja2005optimal` and mostly follow
+the optimization strategy of (Heeres et al., 2017)
+:cite:p:`heeres2017implementing`. The parameters are taken from
+(Eickbusch et al., 2022) :cite:p:`eickbusch2022fast` Table S1, without
+considering the anharmonicity for simplicity and with the exception of
+the dispersive shift taken to be :math:`10` times larger for simulation
+purposes. Our starting point is the well-known Jaynes-Cummings
+Hamiltonian in the dispersive regime, which describes an interaction of
+a qubit with a single bosonic mode when the characteristic qubit
+frequency :math:`\omega_{q}` is far detuned from the one of the
+resonator :math:`\omega_{r}` (see for instance (Blais et al., 2021)
+:cite:p:`blais2021circuit` for more details)
 
 .. math::
 
@@ -77,7 +79,7 @@ that the system starts in the initial state
 
 Let :math:`\varepsilon(t) = (\varepsilon_{r}(t), \varepsilon_{q}(t))`.
 For a fixed time :math:`T`, the system evolves to a state
-:math:`| \Psi(T; \varepsilon(t)) \rangle = U(T; \varepsilon(t)) | \Psi_{\mathrm{initial}} \rangle`.
+:math:`| \Psi(T; \varepsilon(t)) \rangle = U(T; \varepsilon(t))  | \Psi_{\mathrm{initial}} \rangle`.
 We thus want to maximize the state fidelity, i.e., the overlap between
 :math:`| \Psi_{\mathrm{target}} \rangle` and :math:`| \Psi(t) \rangle`:
 
@@ -109,7 +111,7 @@ the resonator and qubit pulses, respectively.
     from paraqeet.measurement.smoothness import Smoothness
     from paraqeet.measurement.weighted_sum_goal import WeightedSumGoal
     from paraqeet.optimization_map import OptimizationMap
-    from paraqeet.optimizers.scipy_optimizer_gradient import ScipyOptimizerGradient
+    from paraqeet.optimizers.scipy_optimizer import ScipyOptimizerGradient
     from paraqeet.propagation import GRAPE, Expm
     from paraqeet.quantity import Quantity
     from paraqeet.signal.envelopes import GaussEnvelope
@@ -191,8 +193,8 @@ Due to the infinite-dimensional nature of the Hilbert space of the
 resonator, it is necessary to introduce a Fock state truncation number
 :math:`N_{\mathrm{T}}`. This creates the problem that, given certain
 pulses, :math:`\mathcal{F}` depends on the choice of
-:math:`N_{\mathrm{T}}`. Following (Heeres et al., 2017), we thus
-consider
+:math:`N_{\mathrm{T}}`. Following (Heeres et al., 2017)
+:cite:p:`heeres2017implementing`, we thus consider
 :math:`N_{\mathrm{T}} \in \{N_{\mathrm{T}}^{(\mathrm{min})}, N_{\mathrm{T}}^{(\mathrm{min})} + 1, \dots, N_{\mathrm{T}}^{(\mathrm{max})} \}`,
 and introduce a penalty when having different values of fidelities for
 different truncation numbers. Thus, we create different systems, and
@@ -291,7 +293,7 @@ numbers.
     
             fid = FidelityGRAPE(
                 propagation_func=prop.get_value,
-                propagation_gradient_func=prop.get_gradient,
+                propagation_and_gradient_func=prop.get_value_and_gradient,
                 target_states=target_state,
                 overlap=overlap_state_vector,
                 fid=state_fidelity,
@@ -306,11 +308,13 @@ numbers.
         n_fock_truncation_list, fock_target
     )
 
-Furthermore, following (Heeres et al., 2017) we also introduce a penalty
-for non-smooth pulses. In particular, we consider the (normalized) sum
-of consecutive square differences of the pulse pixels as cost function
-(see Eq. 21 in the supplementary material of (Heeres et al., 2017)) for
-both the resonator and the qubit pulses:
+Furthermore, following (Heeres et al., 2017)
+:cite:p:`heeres2017implementing` we also introduce a penalty for
+non-smooth pulses. In particular, we consider the (normalized) sum of
+consecutive square differences of the pulse pixels as cost function (see
+Eq. 21 in the supplementary material of (Heeres et al., 2017)
+:cite:p:`heeres2017implementing`) for both the resonator and the qubit
+pulses:
 
 .. math:: g_{\mathrm{smooth}, r} (\varepsilon(t)) = 1.0 - \frac{1}{(N_{\mathrm{PWC}} - 1) R_r^2}\sum_{n=0}^{N_{\mathrm{PWC}} - 1} | \varepsilon_{r}((n+1) \Delta t) - \varepsilon_{r}((n) \Delta t) |^2,
 
@@ -423,6 +427,10 @@ We can compute the fidelities for the different truncation numbers
 .. parsed-literal::
 
     Fidelity at N_T=3 = 0.14410356849601133
+
+
+.. parsed-literal::
+
     Fidelity at N_T=4 = 0.06788860193208278
 
 
@@ -434,7 +442,7 @@ which are quite poor! We now proceed with the pulse optimization.
     optmap = OptimizationMap()
     optmap.add(gen_res, gen_res.get_parameters())
     optmap.add(gen_qubit, gen_qubit.get_parameters())
-    opt = ScipyOptimizerGradient(measure_and_gradient_func=goal.get_value_and_gradient, optimization_map=optmap)
+    opt = ScipyOptimizerGradient(measure_func=goal.get_value, measure_and_gradient_func=goal.get_value_and_gradient, optimization_map=optmap)
     opt.set_options({"maxfun": max_iter})
     optmap.register_params_with_optimizables()
 
@@ -465,28 +473,89 @@ which are quite poor! We now proceed with the pulse optimization.
 .. parsed-literal::
 
     Iteration   10 | Infid = 2.419405e-02
+
+
+.. parsed-literal::
+
     Iteration   20 | Infid = 1.911555e-02
+
+
+.. parsed-literal::
+
     Iteration   30 | Infid = 1.391941e-02
+
+
+.. parsed-literal::
+
     Iteration   40 | Infid = 1.237015e-02
+
+
+.. parsed-literal::
+
     Iteration   50 | Infid = 1.103964e-02
+
+
+.. parsed-literal::
+
     Iteration   60 | Infid = 1.007346e-02
+
+
+.. parsed-literal::
+
     Iteration   70 | Infid = 9.334688e-03
+
+
+.. parsed-literal::
+
     Iteration   80 | Infid = 9.141002e-03
-    Iteration   90 | Infid = 9.105648e-03
-    Iteration  100 | Infid = 9.078611e-03
-    Iteration  110 | Infid = 9.022660e-03
-    Iteration  120 | Infid = 8.816745e-03
-    Iteration  130 | Infid = 8.696031e-03
-    Iteration  140 | Infid = 8.622500e-03
-    CPU times: user 2min 27s, sys: 1.27 s, total: 2min 29s
-    Wall time: 27.3 s
+
+
+.. parsed-literal::
+
+    Iteration   90 | Infid = 9.105647e-03
+
+
+.. parsed-literal::
+
+    Iteration  100 | Infid = 9.078607e-03
+
+
+.. parsed-literal::
+
+    Iteration  110 | Infid = 9.022714e-03
+
+
+.. parsed-literal::
+
+    Iteration  120 | Infid = 8.817123e-03
+
+
+.. parsed-literal::
+
+    Iteration  130 | Infid = 8.682394e-03
+
+
+.. parsed-literal::
+
+    Iteration  140 | Infid = 8.679748e-03
+
+
+.. parsed-literal::
+
+    Iteration  150 | Infid = 8.674133e-03
+
+
+.. parsed-literal::
+
+    CPU times: user 2min 10s, sys: 1.93 s, total: 2min 11s
+    Wall time: 29.9 s
 
 
 
 
 .. parsed-literal::
 
-    {'status': 1, 'value': 0.008622096007182778, 'iterations': 220, 'message': 'CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH'}
+    {'status': 1, 'value': 0.00867413182782295, 'iterations': 151, 'evaluations': 319, 'message': 'CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH'}
 
 
 
@@ -513,8 +582,8 @@ The new fidelities are
 
 .. parsed-literal::
 
-    Fidelity at N_T=3 = 0.9228910585627614
-    Fidelity at N_T=4 = 0.8740239025641567
+    Fidelity at N_T=3 = 0.9218161114767965
+    Fidelity at N_T=4 = 0.8736466275497098
 
 
 Setting truncation to higher values
@@ -618,6 +687,10 @@ Initial fidelity before optimization
 .. parsed-literal::
 
     Fidelity at N_T=15 = 0.014283975566438286
+
+
+.. parsed-literal::
+
     Fidelity at N_T=20 = 0.014283963209907323
 
 
@@ -630,7 +703,7 @@ truncation numbers
     optmap = OptimizationMap()
     optmap.add(gen_res, gen_res.get_parameters())
     optmap.add(gen_qubit, gen_qubit.get_parameters())
-    opt = ScipyOptimizerGradient(measure_and_gradient_func=goal.get_value_and_gradient, optimization_map=optmap)
+    opt = ScipyOptimizerGradient(measure_func=goal.get_value, measure_and_gradient_func=goal.get_value_and_gradient, optimization_map=optmap)
     opt.set_options({"maxfun": max_iter})
     optmap.register_params_with_optimizables()
 
@@ -643,24 +716,64 @@ truncation numbers
 .. parsed-literal::
 
     Iteration   10 | Infid = 5.745168e-02
+
+
+.. parsed-literal::
+
     Iteration   20 | Infid = 3.610521e-02
+
+
+.. parsed-literal::
+
     Iteration   30 | Infid = 2.214250e-02
+
+
+.. parsed-literal::
+
     Iteration   40 | Infid = 1.433837e-02
+
+
+.. parsed-literal::
+
     Iteration   50 | Infid = 1.035732e-02
+
+
+.. parsed-literal::
+
     Iteration   60 | Infid = 8.685263e-03
+
+
+.. parsed-literal::
+
     Iteration   70 | Infid = 8.130577e-03
+
+
+.. parsed-literal::
+
     Iteration   80 | Infid = 7.459853e-03
+
+
+.. parsed-literal::
+
     Iteration   90 | Infid = 7.074717e-03
+
+
+.. parsed-literal::
+
     Iteration  100 | Infid = 6.828301e-03
-    CPU times: user 20min 1s, sys: 2.48 s, total: 20min 4s
-    Wall time: 33.2 s
+
+
+.. parsed-literal::
+
+    CPU times: user 12min 32s, sys: 1.96 s, total: 12min 33s
+    Wall time: 21.7 s
 
 
 
 
 .. parsed-literal::
 
-    {'status': 1, 'value': 0.0066150037700500874, 'iterations': 146, 'message': 'CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH'}
+    {'status': 1, 'value': 0.0066150037700500874, 'iterations': 105, 'evaluations': 146, 'message': 'CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH'}
 
 
 
@@ -693,15 +806,15 @@ the following
 References
 ----------
 
--  **(Khaneja et al., 2005)** N. Khaneja et al., “Optimal control of
-   coupled spin dynamics: design of NMR pulse sequences by gradient
-   ascent algorithms,” *Journal of Magnetic Resonance* **172**, 296–305
-   (2005).
--  **(Heeres et al., 2017)** R. W. Heeres et al., “Implementing a
-   universal gate set on a logical qubit encoded in an oscillator,”
-   *Nature Communications* **8**, 94 (2017).
--  **(Eickbusch et al., 2022)** A. Eickbusch et al., “Fast universal
-   control of an oscillator with weak dispersive coupling to a qubit,”
-   *Nature Physics* **18**, 1464–1469 (2022).
--  **(Blais et al., 2021)** A. Blais et al., “Circuit quantum
-   electrodynamics,” *Reviews of Modern Physics* **93**, 025005 (2021).
+- **(Khaneja et al., 2005)** N. Khaneja et al., “Optimal control of
+  coupled spin dynamics: design of NMR pulse sequences by gradient
+  ascent algorithms,” *Journal of Magnetic Resonance* **172**, 296–305
+  (2005).
+- **(Heeres et al., 2017)** R. W. Heeres et al., “Implementing a
+  universal gate set on a logical qubit encoded in an oscillator,”
+  *Nature Communications* **8**, 94 (2017).
+- **(Eickbusch et al., 2022)** A. Eickbusch et al., “Fast universal
+  control of an oscillator with weak dispersive coupling to a qubit,”
+  *Nature Physics* **18**, 1464–1469 (2022).
+- **(Blais et al., 2021)** A. Blais et al., “Circuit quantum
+  electrodynamics,” *Reviews of Modern Physics* **93**, 025005 (2021).

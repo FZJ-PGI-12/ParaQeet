@@ -5,14 +5,14 @@ from paraqeet.measurement.goat_over_grape import GOATOverGRAPE
 from paraqeet.measurement.makhlin_functional import MakhlinFunctional
 from paraqeet.measurement.measurement import (
     CostFunction,
-    DifferentiableNormalizableMeasurement,
+    DifferentiableCostFunction,
     Measurement,
 )
 from paraqeet.measurement.smoothness import Smoothness
 from paraqeet.measurement.weighted_sum_goal import WeightedSumGoal
 
 __all__ = [
-    "DifferentiableNormalizableMeasurement",
+    "DifferentiableCostFunction",
     "GOATOverGRAPE",
     "MakhlinFunctional",
     "Measurement",
